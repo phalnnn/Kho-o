@@ -6,16 +6,14 @@
   <title>Kho áo của Chía 💗</title>
   <link rel="icon" href="avatar.jpg" type="image/jpeg">
 
-  <!-- Preconnect CDN & Backend -->
   <link rel="preconnect" href="https://llijmkoztqthovvklamm.supabase.co" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- Supabase Client JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
 
   <style>
-    *, *::before, *::after {
+    * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
@@ -28,17 +26,18 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 24px 14px 40px;
+      padding: 24px 12px 40px;
       background: linear-gradient(-45deg, #050507, #fe2c55, #121216, #ffffff, #000000);
       background-size: 400% 400%;
-      animation: bgShift 14s ease infinite;
+      animation: redWhiteBlackGradient 10s ease infinite;
       overflow-x: hidden;
       color: #ffffff;
     }
 
-    @keyframes bgShift {
-      0%, 100% { background-position: 0% 50%; }
+    @keyframes redWhiteBlackGradient {
+      0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     .container {
@@ -63,60 +62,63 @@
       border-radius: 28px;
       padding: 3px;
       overflow: hidden;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85),
-                  0 0 20px rgba(254, 44, 85, 0.25);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9),
+                  0 0 25px rgba(254, 44, 85, 0.3),
+                  0 0 15px rgba(255, 255, 255, 0.2);
     }
 
     .card-border-wrapper::before {
       content: "";
       position: absolute;
-      width: 180%;
-      height: 180%;
-      left: -40%;
-      top: -40%;
+      width: 170%;
+      height: 170%;
       background: conic-gradient(#fe2c55, #ffffff, #111111, #fe2c55);
-      animation: spin 6s linear infinite;
+      animation: spin 5s linear infinite;
       will-change: transform;
       z-index: 0;
     }
 
     @keyframes spin {
-      to { transform: rotate(360deg); }
+      100% { transform: rotate(360deg); }
     }
 
     .card {
       position: relative;
       width: 100%;
-      background: linear-gradient(rgba(10, 10, 14, 0.9), rgba(10, 10, 14, 0.95)), 
+      background: linear-gradient(rgba(10, 10, 14, 0.88), rgba(10, 10, 14, 0.94)), 
                   url('bg-profile.jpg') center/cover no-repeat;
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-radius: 25px;
-      padding: 22px 16px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 26px;
+      padding: 22px 14px;
       z-index: 1;
     }
 
+    /* Search & Filter Bar */
     .vault-search-box {
       width: 100%;
       position: relative;
-      margin-bottom: 14px;
+      margin-bottom: 10px;
     }
 
     .vault-search-box input {
       width: 100%;
-      padding: 11px 14px 11px 38px;
+      padding: 10px 14px 10px 38px;
       background: rgba(0, 0, 0, 0.65);
       border: 1px solid rgba(254, 44, 85, 0.4);
       border-radius: 12px;
       color: #fff;
-      font-size: 0.92rem;
+      font-size: 0.9rem;
       outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: all 0.2s;
     }
 
     .vault-search-box input:focus {
       border-color: #00f0ff;
-      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
     }
 
     .vault-search-box i {
@@ -127,37 +129,70 @@
       color: #fe2c55;
     }
 
+    /* Dải chip lọc giá vuốt ngang */
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 12px;
+      scrollbar-width: none;
+    }
+    .filter-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip-btn {
+      flex: 0 0 auto;
+      padding: 6px 12px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #ddd;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip-btn.active {
+      background: #fe2c55;
+      border-color: #fe2c55;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(254, 44, 85, 0.5);
+    }
+
+    /* Grid Layout */
     .vault-grid {
       display: grid;
       grid-template-columns: 1fr;
       gap: 14px;
-      margin-top: 10px;
     }
-
     @media (min-width: 480px) {
       .vault-grid { grid-template-columns: 1fr 1fr; }
     }
 
+    /* Card Item (Tối ưu hierarchy & tỷ lệ ảnh 4:5) */
     .vault-card {
       background: rgba(16, 16, 24, 0.95);
       border: 1.5px solid rgba(254, 44, 85, 0.35);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
-      transition: transform 0.25s ease, border-color 0.25s ease;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.75);
+      transition: transform 0.2s ease, border-color 0.2s ease;
       display: flex;
       flex-direction: column;
     }
 
     .vault-card:hover {
       border-color: #00f0ff;
-      transform: translateY(-3px);
+      transform: translateY(-2px);
     }
 
     .vault-img-wrap {
       position: relative;
       width: 100%;
-      height: 180px;
+      aspect-ratio: 4 / 4.8;
       background: #09090c;
       overflow: hidden;
       cursor: pointer;
@@ -175,19 +210,6 @@
       transform: scale(1.04);
     }
 
-    .vault-tag {
-      position: absolute;
-      bottom: 8px;
-      left: 8px;
-      background: rgba(0, 0, 0, 0.85);
-      border: 1px solid rgba(0, 240, 255, 0.6);
-      color: #00f0ff;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 6px;
-    }
-
     .vault-price-badge {
       position: absolute;
       top: 8px;
@@ -195,10 +217,11 @@
       background: rgba(0, 0, 0, 0.85);
       border: 1px solid #fcee0a;
       color: #fcee0a;
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       font-weight: 800;
       padding: 3px 8px;
       border-radius: 6px;
+      box-shadow: 0 0 10px rgba(252, 238, 10, 0.3);
     }
 
     .vault-card-body {
@@ -207,13 +230,14 @@
       flex-direction: column;
       gap: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.35);
+      background: rgba(0, 0, 0, 0.3);
     }
 
-    .vault-card-row {
+    .vault-title-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 8px;
     }
 
     .vault-code {
@@ -221,60 +245,140 @@
       font-weight: 800;
       color: #fe2c55;
       letter-spacing: 0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
-    .vault-price-display {
-      font-size: 0.9rem;
-      font-weight: 800;
-      color: #fcee0a;
+    .btn-icon-copy {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #ddd;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .btn-icon-copy:active {
+      transform: scale(0.9);
+      background: #fe2c55;
+      border-color: #fe2c55;
+      color: #fff;
     }
 
     .btn-buy-acc {
-      padding: 7px 12px;
+      width: 100%;
+      padding: 9px 12px;
       background: linear-gradient(135deg, #fe2c55, #ff0055);
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       color: #fff;
-      font-size: 0.8rem;
+      font-size: 0.85rem;
       font-weight: 700;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      justify-content: center;
+      gap: 7px;
+      box-shadow: 0 4px 14px rgba(254, 44, 85, 0.4);
+      transition: all 0.2s;
     }
 
     .btn-buy-acc:active {
-      transform: scale(0.96);
+      transform: scale(0.97);
     }
 
-    .btn-copy-code {
+    /* Skeleton Loading UI */
+    .skeleton-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 480px) {
+      .skeleton-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .skeleton-card {
+      background: rgba(20, 20, 30, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .skeleton-img {
+      width: 100%;
+      aspect-ratio: 4 / 4.8;
+      background: linear-gradient(90deg, #181824 25%, #252538 50%, #181824 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #181824 25%, #252538 50%, #181824 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-btn {
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, #181824 25%, #252538 50%, #181824 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+
+    /* Empty State */
+    .vault-empty {
+      text-align: center;
+      padding: 30px 10px;
+      color: #999;
+      font-size: 0.88rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .empty-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-empty-action {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #eee;
-      font-size: 0.74rem;
-      padding: 5px 8px;
-      border-radius: 6px;
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      transition: background 0.2s;
     }
 
-    .btn-copy-code:hover {
-      background: #fe2c55;
-      border-color: #fe2c55;
-    }
-
-    .vault-status-box {
-      text-align: center;
-      padding: 35px 10px;
-      font-size: 0.9rem;
-      color: #aaa;
-    }
-
-    /* Modal phóng to */
+    /* Modal phóng to ảnh */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -294,7 +398,7 @@
       max-width: 95vw;
       max-height: 85vh;
       object-fit: contain;
-      border-radius: 8px;
+      border-radius: 10px;
       border: 1px solid rgba(254, 44, 85, 0.4);
     }
 
@@ -307,7 +411,7 @@
       cursor: pointer;
     }
 
-    /* Toast Notification */
+    /* Toast */
     .toast-msg {
       position: fixed;
       bottom: 24px;
@@ -316,14 +420,14 @@
       background: rgba(18, 18, 24, 0.95);
       border: 1px solid #00f0ff;
       color: #fff;
-      padding: 10px 18px;
-      border-radius: 30px;
+      padding: 9px 18px;
+      border-radius: 24px;
       font-size: 0.85rem;
-      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.3);
+      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.35);
       z-index: 10000;
       opacity: 0;
       pointer-events: none;
-      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
       white-space: nowrap;
     }
 
@@ -344,30 +448,63 @@
 
     <div class="card-border-wrapper">
       <main class="card">
-        <header style="text-align: center; margin-bottom: 16px;">
-          <h1 style="font-size: 1.25rem; font-weight: 800; color: #00f0ff;">
+        <header style="text-align: center; margin-bottom: 14px;">
+          <h1 style="font-size: 1.25rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.4);">
             <i class="fa-solid fa-shirt"></i> DANH SÁCH ACC CÓ SẴN
           </h1>
-          <p style="font-size: 0.8rem; color: #bbb; margin-top: 5px;">
-            Nhấn <strong>"MUA ACC NÀY"</strong> để sao chép thông tin và sang TikTok nhắn cho tui nhé!
+          <p style="font-size: 0.8rem; color: #bbb; margin-top: 4px;">
+            Nhấn <strong>"MUA ACC NÀY"</strong> để copy thông tin và nhắn TikTok cho tui nhé 💗
           </p>
         </header>
 
+        <!-- Search Input -->
         <div class="vault-search-box">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" id="vaultSearchInput" placeholder="Tìm kiếm theo mã tài khoản (#xxxxx)..." autocomplete="off">
         </div>
 
-        <div id="vaultLoading" class="vault-status-box">
-          <i class="fa-solid fa-spinner fa-spin" style="font-size: 1.6rem; color: #fe2c55; margin-bottom: 8px;"></i>
-          <p>Đang tải danh sách tài khoản...</p>
+        <!-- Filter Chips Bar -->
+        <div class="filter-chips">
+          <button class="chip-btn active" data-filter="all">Tất cả</button>
+          <button class="chip-btn" data-filter="under100">Dưới 100k</button>
+          <button class="chip-btn" data-filter="100to300">100k - 300k</button>
+          <button class="chip-btn" data-filter="over300">Trên 300k</button>
+          <button class="chip-btn" data-filter="sortAsc">Giá rẻ trước</button>
         </div>
 
+        <!-- Skeleton Loading Placeholders -->
+        <div id="vaultSkeleton" class="skeleton-grid">
+          <div class="skeleton-card">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line" style="width: 60%;"></div>
+              <div class="skeleton-btn"></div>
+            </div>
+          </div>
+          <div class="skeleton-card">
+            <div class="skeleton-img"></div>
+            <div class="skeleton-body">
+              <div class="skeleton-line" style="width: 50%;"></div>
+              <div class="skeleton-btn"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Grid -->
         <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
 
-        <div id="vaultEmpty" class="vault-status-box" style="display: none;">
-          <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px; color: #555;"></i>
-          <p>Không tìm thấy tài khoản phù hợp!</p>
+        <!-- Empty State -->
+        <div id="vaultEmpty" class="vault-empty" style="display: none;">
+          <i class="fa-solid fa-box-open" style="font-size: 2rem; color: #555;"></i>
+          <p>Không tìm thấy tài khoản nào khớp yêu cầu!</p>
+          <div class="empty-actions">
+            <button class="btn-empty-action" onclick="resetFilters()">
+              <i class="fa-solid fa-rotate-left"></i> Xóa bộ lọc
+            </button>
+            <button class="btn-empty-action" onclick="contactCustomRequest()" style="background:#fe2c55; border-color:#fe2c55;">
+              <i class="fa-brands fa-tiktok"></i> Nhắn tìm acc theo ý
+            </button>
+          </div>
         </div>
       </main>
     </div>
@@ -379,7 +516,7 @@
     <img class="image-modal-content" id="modalImg" alt="Xem ảnh phóng to" onclick="event.stopPropagation()">
   </div>
 
-  <!-- Toast -->
+  <!-- Toast Noti -->
   <div id="toast" class="toast-msg"></div>
 
   <script>
@@ -389,13 +526,15 @@
 
     let _supabase = null;
     let vaultAccounts = [];
+    let currentFilter = 'all';
+    let searchQuery = '';
     let searchDebounceTimer = null;
 
     function showToast(text) {
       const toast = document.getElementById('toast');
       toast.textContent = text;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
+      setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
     async function initSupabase() {
@@ -408,9 +547,7 @@
     }
 
     async function fetchVaultAccounts() {
-      const loadingEl = document.getElementById('vaultLoading');
-      const gridEl = document.getElementById('vaultGrid');
-      const emptyEl = document.getElementById('vaultEmpty');
+      const skeletonEl = document.getElementById('vaultSkeleton');
 
       try {
         const { data, error } = await _supabase
@@ -428,16 +565,36 @@
           price: parseFloat(row.price) || 0
         }));
 
-        loadingEl.style.display = 'none';
-        renderVaultAccounts(vaultAccounts);
+        skeletonEl.style.display = 'none';
+        applyFiltersAndRender();
       } catch (err) {
         console.error("Lỗi Supabase:", err);
-        loadingEl.innerHTML = `<p style="color:#fe2c55;">Lỗi kết nối kho tài khoản. Vui lòng tải lại trang!</p>`;
+        skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể tải dữ liệu. Vui lòng thử lại sau!</p>`;
       }
     }
 
     function formatPrice(num) {
       return num > 0 ? num.toLocaleString('vi-VN') + 'đ' : 'Liên hệ';
+    }
+
+    function applyFiltersAndRender() {
+      let filtered = [...vaultAccounts];
+
+      if (searchQuery) {
+        filtered = filtered.filter(acc => acc.title.toLowerCase().includes(searchQuery));
+      }
+
+      if (currentFilter === 'under100') {
+        filtered = filtered.filter(acc => acc.price > 0 && acc.price < 100000);
+      } else if (currentFilter === '100to300') {
+        filtered = filtered.filter(acc => acc.price >= 100000 && acc.price <= 300000);
+      } else if (currentFilter === 'over300') {
+        filtered = filtered.filter(acc => acc.price > 300000);
+      } else if (currentFilter === 'sortAsc') {
+        filtered.sort((a, b) => a.price - b.price);
+      }
+
+      renderVaultAccounts(filtered);
     }
 
     function renderVaultAccounts(list) {
@@ -448,7 +605,7 @@
 
       if (list.length === 0) {
         gridEl.style.display = 'none';
-        emptyEl.style.display = 'block';
+        emptyEl.style.display = 'flex';
         return;
       }
 
@@ -463,7 +620,7 @@
 
         const priceText = formatPrice(acc.price);
 
-        // Phần ảnh
+        // Khung ảnh 4:5
         const imgWrap = document.createElement('div');
         imgWrap.className = 'vault-img-wrap';
 
@@ -474,75 +631,85 @@
           img.alt = acc.title;
           img.loading = 'lazy';
           img.onerror = () => {
-            imgWrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#666;font-size:0.8rem;"><i class="fa-solid fa-image-slash"></i> Lỗi ảnh</div>';
+            imgWrap.innerHTML = '<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#666;font-size:0.8rem;"><i class="fa-solid fa-image-slash"></i>&nbsp;Lỗi ảnh</div>';
           };
           imgWrap.appendChild(img);
           imgWrap.onclick = () => openZoomImage(acc.image);
         } else {
-          imgWrap.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#555;font-size:0.8rem;"><i class="fa-solid fa-image"></i>&nbsp;Không có ảnh</div>`;
+          imgWrap.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#666;font-size:0.8rem;"><i class="fa-solid fa-image"></i>&nbsp;Không có ảnh</div>`;
         }
-
-        const tag = document.createElement('span');
-        tag.className = 'vault-tag';
-        tag.textContent = 'VERIFIED';
 
         const badge = document.createElement('span');
         badge.className = 'vault-price-badge';
         badge.textContent = priceText;
+        imgWrap.appendChild(badge);
 
-        imgWrap.append(tag, badge);
-
-        // Phần thông tin
+        // Body card
         const body = document.createElement('div');
         body.className = 'vault-card-body';
 
-        const rowTop = document.createElement('div');
-        rowTop.className = 'vault-card-row';
+        const titleRow = document.createElement('div');
+        titleRow.className = 'vault-title-row';
 
         const titleEl = document.createElement('span');
         titleEl.className = 'vault-code';
         titleEl.textContent = acc.title;
 
-        const priceDisplay = document.createElement('span');
-        priceDisplay.className = 'vault-price-display';
-        priceDisplay.textContent = priceText;
-
-        rowTop.append(titleEl, priceDisplay);
-
-        const rowBottom = document.createElement('div');
-        rowBottom.className = 'vault-card-row';
-
+        // Nút copy dạng icon tròn
         const copyBtn = document.createElement('button');
-        copyBtn.className = 'btn-copy-code';
+        copyBtn.className = 'btn-icon-copy';
         copyBtn.type = 'button';
-        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy mã';
+        copyBtn.title = 'Copy mã tài khoản';
+        copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
         copyBtn.onclick = () => copyAccCode(acc.title, copyBtn);
 
+        titleRow.append(titleEl, copyBtn);
+
+        // Nút mua acc full-width
         const buyBtn = document.createElement('button');
         buyBtn.className = 'btn-buy-acc';
         buyBtn.type = 'button';
         buyBtn.innerHTML = '<i class="fa-brands fa-tiktok"></i> MUA ACC NÀY';
         buyBtn.onclick = () => selectAndOrderAccount(acc.title, priceText);
 
-        rowBottom.append(copyBtn, buyBtn);
-        body.append(rowTop, rowBottom);
+        body.append(titleRow, buyBtn);
         card.append(imgWrap, body);
-
         fragment.appendChild(card);
       });
 
       gridEl.appendChild(fragment);
     }
 
-    // Debounced search
+    // Lắng nghe sự kiện chip lọc
+    document.querySelectorAll('.chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.dataset.filter;
+        applyFiltersAndRender();
+      });
+    });
+
+    // Tìm kiếm với Debounce
     document.getElementById('vaultSearchInput').addEventListener('input', (e) => {
       clearTimeout(searchDebounceTimer);
-      const query = e.target.value.trim().toLowerCase();
       searchDebounceTimer = setTimeout(() => {
-        const filtered = vaultAccounts.filter(acc => acc.title.toLowerCase().includes(query));
-        renderVaultAccounts(filtered);
+        searchQuery = e.target.value.trim().toLowerCase();
+        applyFiltersAndRender();
       }, 200);
     });
+
+    function resetFilters() {
+      searchQuery = '';
+      document.getElementById('vaultSearchInput').value = '';
+      currentFilter = 'all';
+      document.querySelectorAll('.chip-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === 'all'));
+      applyFiltersAndRender();
+    }
+
+    function contactCustomRequest() {
+      window.open(TIKTOK_PROFILE, '_blank', 'noopener,noreferrer');
+    }
 
     async function writeClipboardText(text) {
       if (navigator.clipboard && window.isSecureContext) {
@@ -562,11 +729,11 @@
       try {
         await writeClipboardText(code);
         const original = btn.innerHTML;
-        btn.innerHTML = `<i class="fa-solid fa-check"></i> Đã chép!`;
-        showToast(`Đã sao chép mã: ${code}`);
-        setTimeout(() => { btn.innerHTML = original; }, 2000);
+        btn.innerHTML = `<i class="fa-solid fa-check" style="color:#00f0ff;"></i>`;
+        showToast(`Đã chép mã: ${code}`);
+        setTimeout(() => { btn.innerHTML = original; }, 1500);
       } catch (e) {
-        showToast('Không thể sao chép tự động!');
+        showToast('Lỗi khi sao chép mã!');
       }
     }
 
@@ -580,9 +747,9 @@
 
       try {
         await writeClipboardText(message);
-        showToast(`Đã copy nội dung mua mã ${accCode}! Đang mở TikTok...`);
+        showToast(`Đã copy nội dung ${accCode}! Đang chuyển sang TikTok...`);
       } catch (e) {
-        showToast(`Mở TikTok để liên hệ mua mã ${accCode}`);
+        showToast(`Mở TikTok để nhắn Chía mã ${accCode}`);
       }
 
       setTimeout(() => {
