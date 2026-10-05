@@ -42,8 +42,16 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
+      object-position: center center;
       z-index: -2;
       pointer-events: none;
+    }
+
+    /* Trên điện thoại: dịch nội dung video sang trái */
+    @media (max-width: 768px) {
+      .bg-video {
+        object-position: 70% center;
+      }
     }
 
     /* Lớp phủ tối mỏng để giữ độ sâu cho video */
