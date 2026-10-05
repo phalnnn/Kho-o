@@ -764,7 +764,7 @@
       cursor: pointer;
     }
 
-    /* Modal Thông Báo Đặt Hàng & Nhắc Nhở Dán Cho Chía */
+    /* Modal Thông Báo Đặt Hàng */
     .order-modal-overlay {
       position: fixed;
       inset: 0;
@@ -1034,7 +1034,7 @@
     </div>
   </div>
 
-  <!-- Modal Thông Báo Đã Sao Chép & Hướng Dẫn Nhắn Tin Cho Chía -->
+  <!-- Modal Thông Báo Đặt Hàng -->
   <div id="orderNoticeModal" class="order-modal-overlay">
     <div class="order-modal-card">
       <div class="order-modal-icon">
@@ -1050,7 +1050,7 @@
 
       <div class="order-modal-actions">
         <button class="btn-goto-tiktok" onclick="proceedToTikTokNow()">
-          <i class="fa-brands fa-tiktok"></i> MỞ TIKTOK NGAY (<span id="redirectCount">3s</span>)
+          <i class="fa-brands fa-tiktok"></i> MỞ TIKTOK NGAY (<span id="redirectCount">10s</span>)
         </button>
         <button class="btn-cancel-modal" onclick="closeOrderNoticeModal()">
           Ở lại trang này
@@ -1377,7 +1377,7 @@
       selectAllCb.checked = cart.length > 0 && selectedItems.length === cart.length;
     }
 
-    /* Mở ứng dụng TikTok thông minh (Deep Link) */
+    /* Mở TikTok */
     function openTikTokApp() {
       const appUrl = `snssdk1180://user/profile?unique_id=${TIKTOK_USERNAME}`;
       const webUrl = `https://www.tiktok.com/@${TIKTOK_USERNAME}`;
@@ -1388,11 +1388,11 @@
       }, 500);
     }
 
-    /* Quản lý Popup thông báo đơn hàng */
+    /* Đếm ngược 10 giây trước khi chuyển tiếp */
     function showOrderNoticeModal() {
       const modal = document.getElementById('orderNoticeModal');
       const counterEl = document.getElementById('redirectCount');
-      let countdown = 3;
+      let countdown = 10;
 
       counterEl.textContent = `${countdown}s`;
       modal.classList.add('active');
@@ -1411,7 +1411,7 @@
 
       redirectTimer = setTimeout(() => {
         proceedToTikTokNow();
-      }, 3500);
+      }, 10000);
     }
 
     function proceedToTikTokNow() {
