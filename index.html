@@ -46,19 +46,19 @@
       pointer-events: none;
     }
 
-    /* Lớp phủ tối nhẹ để tăng tương phản chữ */
+    /* Lớp phủ tối mỏng để giữ độ sâu cho video */
     .bg-overlay {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.45);
+      background: rgba(0, 0, 0, 0.25);
       z-index: -1;
       pointer-events: none;
     }
 
-    /* Co giãn khung: Mobile 540px, Tablet 860px, PC lên đến 1140px */
+    /* Khung chính responsive */
     .container {
       width: 100%;
       max-width: 540px;
@@ -87,47 +87,50 @@
       align-items: center;
     }
 
-    /* Viền RGB quay mượt mà, nền trong suốt để video lộ xuyên qua */
+    /* Viền RGB quay chỉ xuất hiện ở mép ngoài bằng Mask (giữa rỗng 100% để thấy video) */
     .card-border-wrapper {
       position: relative;
       width: 100%;
       border-radius: 28px;
-      padding: 3px;
-      overflow: hidden;
+      padding: 2px;
       display: flex;
       justify-content: center;
       align-items: center;
       background: transparent;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
-                  0 0 25px rgba(254, 44, 85, 0.35);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7),
+                  0 0 20px rgba(254, 44, 85, 0.3);
     }
 
     .card-border-wrapper::before {
       content: "";
       position: absolute;
-      width: 250%;
-      height: 250%;
+      inset: 0;
+      border-radius: 28px;
+      padding: 2px;
       background: conic-gradient(from 0deg, #fe2c55, #ffffff, #00f0ff, #fe2c55);
-      animation: spin 6s linear infinite;
-      z-index: 0;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: spinBorder 5s linear infinite;
       pointer-events: none;
+      z-index: 2;
     }
 
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
+    @keyframes spinBorder {
+      100% { filter: hue-rotate(360deg); }
     }
 
-    /* Card bọc ngoài: Kính mờ trong suốt (Glassmorphism) */
+    /* Card bọc ngoài: KÍNH TRONG SUỐT NHÌN XUYÊN THẤU VIDEO */
     .card {
       position: relative;
       width: 100%;
-      background: rgba(14, 14, 20, 0.68);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 25px;
+      background: rgba(15, 15, 25, 0.28); /* Trong suốt 72% để nhìn rõ chuyển động video */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 26px;
       padding: 22px 14px;
       z-index: 1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
     @media (min-width: 768px) {
@@ -143,19 +146,21 @@
     .vault-search-box input {
       width: 100%;
       padding: 11px 40px 11px 40px;
-      background: rgba(0, 0, 0, 0.55);
-      border: 1px solid rgba(254, 44, 85, 0.4);
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(254, 44, 85, 0.5);
       border-radius: 12px;
       color: #fff;
       font-size: 0.92rem;
       outline: none;
       transition: all 0.2s;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
     }
 
     .vault-search-box input:focus {
       border-color: #00f0ff;
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
-      background: rgba(0, 0, 0, 0.75);
+      background: rgba(0, 0, 0, 0.6);
     }
 
     .vault-search-box i.search-icon {
@@ -172,12 +177,12 @@
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.2);
       border: none;
       border-radius: 50%;
       width: 20px;
       height: 20px;
-      color: #ccc;
+      color: #fff;
       font-size: 0.75rem;
       align-items: center;
       justify-content: center;
@@ -203,9 +208,9 @@
       flex: 0 0 auto;
       padding: 6px 14px;
       border-radius: 20px;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: #ddd;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #eee;
       font-size: 0.8rem;
       font-weight: 600;
       cursor: pointer;
@@ -218,10 +223,10 @@
       background: #fe2c55;
       border-color: #fe2c55;
       color: #fff;
-      box-shadow: 0 0 10px rgba(254, 44, 85, 0.5);
+      box-shadow: 0 0 10px rgba(254, 44, 85, 0.6);
     }
 
-    /* Lưới Card: Mobile 1->2 cột, Tablet 3 cột, PC 4 cột */
+    /* Grid Layout: Tối ưu 3 - 4 cột trên PC */
     .vault-grid, .skeleton-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -237,15 +242,15 @@
       .vault-grid, .skeleton-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
     }
 
-    /* Từng thẻ Acc bán trong suốt */
+    /* Từng thẻ Acc bán trong suốt dạng kính */
     .vault-card {
-      background: rgba(18, 18, 26, 0.65);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1.5px solid rgba(254, 44, 85, 0.38);
+      background: rgba(15, 15, 25, 0.35); /* Kính trong suốt nhìn xuyên qua video */
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(254, 44, 85, 0.35);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       display: flex;
       flex-direction: column;
@@ -254,14 +259,15 @@
     .vault-card:hover {
       border-color: #00f0ff;
       transform: translateY(-4px);
-      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.25);
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.3);
+      background: rgba(20, 20, 35, 0.45);
     }
 
     .vault-img-wrap {
       position: relative;
       width: 100%;
       aspect-ratio: 4 / 4.8;
-      background: rgba(9, 9, 12, 0.7);
+      background: rgba(0, 0, 0, 0.3);
       overflow: hidden;
       cursor: pointer;
     }
@@ -298,7 +304,7 @@
       flex-direction: column;
       gap: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(10, 10, 16, 0.45);
+      background: rgba(0, 0, 0, 0.35); /* Vùng mã & nút mua mờ nhẹ */
       flex: 1;
       justify-content: space-between;
     }
@@ -318,12 +324,13 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
     }
 
     .btn-icon-copy {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #ddd;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
       width: 32px;
       height: 32px;
       border-radius: 8px;
@@ -368,8 +375,8 @@
     .btn-buy-acc:active { transform: scale(0.97); }
 
     .btn-add-cart {
-      background: rgba(0, 240, 255, 0.12);
-      border: 1px solid rgba(0, 240, 255, 0.5);
+      background: rgba(0, 240, 255, 0.16);
+      border: 1px solid rgba(0, 240, 255, 0.6);
       color: #00f0ff;
       border-radius: 10px;
       padding: 0 11px;
@@ -385,17 +392,17 @@
 
     /* Skeleton Loading UI */
     .skeleton-card {
-      background: rgba(20, 20, 30, 0.5);
+      background: rgba(20, 20, 30, 0.3);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       overflow: hidden;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
     }
 
     .skeleton-img {
       width: 100%;
       aspect-ratio: 4 / 4.8;
-      background: linear-gradient(90deg, rgba(24, 24, 36, 0.6) 25%, rgba(40, 40, 60, 0.8) 50%, rgba(24, 24, 36, 0.6) 75%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -410,7 +417,7 @@
     .skeleton-line {
       height: 16px;
       border-radius: 4px;
-      background: linear-gradient(90deg, rgba(24, 24, 36, 0.6) 25%, rgba(40, 40, 60, 0.8) 50%, rgba(24, 24, 36, 0.6) 75%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -418,7 +425,7 @@
     .skeleton-btn {
       height: 34px;
       border-radius: 8px;
-      background: linear-gradient(90deg, rgba(24, 24, 36, 0.6) 25%, rgba(40, 40, 60, 0.8) 50%, rgba(24, 24, 36, 0.6) 75%);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -494,7 +501,7 @@
       width: 100%;
       max-width: 500px;
       max-height: 82vh;
-      background: rgba(18, 18, 24, 0.85);
+      background: rgba(18, 18, 28, 0.85);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(254, 44, 85, 0.4);
@@ -575,8 +582,8 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 12px;
       padding: 8px 10px;
     }
@@ -731,7 +738,7 @@
 
   <div class="container">
     <div class="nav-bar">
-      <span style="font-size: 0.95rem; color: #00f0ff; font-weight: 700;">
+      <span style="font-size: 0.95rem; color: #00f0ff; font-weight: 700; text-shadow: 0 0 10px rgba(0,240,255,0.6);">
         <i class="fa-solid fa-shirt"></i> Kho áo của Chía 💗
       </span>
     </div>
@@ -739,10 +746,10 @@
     <div class="card-border-wrapper">
       <main class="card">
         <header style="text-align: center; margin-bottom: 16px;">
-          <h1 style="font-size: 1.3rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 10px rgba(0,240,255,0.4);">
+          <h1 style="font-size: 1.3rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 12px rgba(0,240,255,0.6);">
             <i class="fa-solid fa-shirt"></i> DANH SÁCH ACC CÓ SẴN
           </h1>
-          <p style="font-size: 0.82rem; color: #bbb; margin-top: 4px;">
+          <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
             Nhấn <strong>"MUA ACC"</strong> hoặc thêm nhiều acc vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗
           </p>
         </header>
@@ -801,7 +808,7 @@
         <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
 
         <!-- Empty State -->
-        <div id="vaultEmpty" style="display: none; text-align: center; padding: 30px 10px; color: #888;">
+        <div id="vaultEmpty" style="display: none; text-align: center; padding: 30px 10px; color: #ccc;">
           <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px;"></i>
           <p>Không tìm thấy tài khoản phù hợp!</p>
         </div>
@@ -833,13 +840,11 @@
         </button>
       </div>
 
-      <div id="cartItemsList" class="cart-items-list">
-        <!-- Render danh sách acc trong giỏ -->
-      </div>
+      <div id="cartItemsList" class="cart-items-list"></div>
 
       <div class="cart-footer">
         <div class="cart-summary">
-          <span style="font-size: 0.9rem; color: #aaa;">Tổng thanh toán:</span>
+          <span style="font-size: 0.9rem; color: #ccc;">Tổng thanh toán:</span>
           <span id="cartTotalPrice" class="cart-total-price">0đ</span>
         </div>
         <button class="btn-checkout" onclick="checkoutSelectedCart()">
@@ -1011,7 +1016,7 @@
           imgWrap.appendChild(img);
           imgWrap.onclick = () => openZoomImage(acc.image);
         } else {
-          imgWrap.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#666;font-size:0.8rem;"><i class="fa-solid fa-image"></i>&nbsp;Không có ảnh</div>`;
+          imgWrap.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:0.8rem;"><i class="fa-solid fa-image"></i>&nbsp;Không có ảnh</div>`;
         }
 
         const badge = document.createElement('span');
@@ -1093,7 +1098,7 @@
       listEl.replaceChildren();
 
       if (cart.length === 0) {
-        listEl.innerHTML = `<div style="text-align:center; padding:30px 0; color:#777; font-size:0.88rem;">Giỏ hàng của bạn đang trống!</div>`;
+        listEl.innerHTML = `<div style="text-align:center; padding:30px 0; color:#aaa; font-size:0.88rem;">Giỏ hàng của bạn đang trống!</div>`;
         updateCartCalculations();
         return;
       }
