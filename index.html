@@ -27,7 +27,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 55px 12px 90px; /* Thêm padding trên để chừa khoảng trống cho chibi ngồi */
+      padding: 55px 12px 90px;
       background: #000;
       overflow-x: hidden;
       color: #ffffff;
@@ -80,29 +80,53 @@
       .container { max-width: 1140px; }
     }
 
-    /* Chibi ngồi ở mép trên bên trái */
-    .chibi-sitter {
+    /* Chibi ngồi góc trái */
+    .chibi-sitter-left {
       position: absolute;
-      top: -55px; /* Ngồi đè lên mép card */
+      top: -55px;
       left: 12px;
       width: 90px;
       height: auto;
       z-index: 10;
       pointer-events: none;
       filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
-      animation: chibiBounce 3.5s ease-in-out infinite;
+      animation: chibiBounceLeft 3.5s ease-in-out infinite;
+      user-select: none;
+    }
+
+    /* Chibi ngồi góc phải */
+    .chibi-sitter-right {
+      position: absolute;
+      top: -55px;
+      right: 12px;
+      width: 80px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+      animation: chibiBounceRight 3.5s ease-in-out infinite 0.6s;
       user-select: none;
     }
 
     @media (min-width: 768px) {
-      .chibi-sitter {
+      .chibi-sitter-left {
         top: -72px;
         left: 20px;
         width: 120px;
       }
+      .chibi-sitter-right {
+        top: -68px;
+        right: 20px;
+        width: 105px;
+      }
     }
 
-    @keyframes chibiBounce {
+    @keyframes chibiBounceLeft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes chibiBounceRight {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-4px); }
     }
@@ -246,7 +270,7 @@
       box-shadow: 0 0 10px rgba(254, 44, 85, 0.6);
     }
 
-    /* Grid Layout: Responsive trên PC/Mobile */
+    /* Grid Layout Responsive */
     .vault-grid, .skeleton-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -757,8 +781,11 @@
   <div class="bg-overlay"></div>
 
   <div class="container">
-    <!-- Ảnh Chibi ngồi ở góc trên bên trái mép khung -->
-    <img src="chibi.png" alt="Chía Chibi" class="chibi-sitter">
+    <!-- Chibi ngồi góc trái -->
+    <img src="chibi.png" alt="Chía Chibi Trái" class="chibi-sitter-left">
+
+    <!-- Chibi ngồi góc phải -->
+    <img src="chibi-right.png" alt="Chía Chibi Phải" class="chibi-sitter-right">
 
     <div class="card-border-wrapper">
       <main class="card">
