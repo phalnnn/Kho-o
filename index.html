@@ -80,14 +80,7 @@
       .container { max-width: 1140px; }
     }
 
-    .nav-bar {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    /* Viền RGB quay chỉ xuất hiện ở mép ngoài bằng Mask (giữa rỗng 100% để thấy video) */
+    /* Viền RGB quay mép ngoài, giữa rỗng để xuyên thấu video */
     .card-border-wrapper {
       position: relative;
       width: 100%;
@@ -120,11 +113,11 @@
       100% { filter: hue-rotate(360deg); }
     }
 
-    /* Card bọc ngoài: KÍNH TRONG SUỐT NHÌN XUYÊN THẤU VIDEO */
+    /* Card bọc ngoài: Kính trong suốt nhìn xuyên qua video */
     .card {
       position: relative;
       width: 100%;
-      background: rgba(15, 15, 25, 0.28); /* Trong suốt 72% để nhìn rõ chuyển động video */
+      background: rgba(15, 15, 25, 0.28);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-radius: 26px;
@@ -226,7 +219,7 @@
       box-shadow: 0 0 10px rgba(254, 44, 85, 0.6);
     }
 
-    /* Grid Layout: Tối ưu 3 - 4 cột trên PC */
+    /* Grid Layout: Responsive trên PC/Mobile */
     .vault-grid, .skeleton-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -242,9 +235,9 @@
       .vault-grid, .skeleton-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
     }
 
-    /* Từng thẻ Acc bán trong suốt dạng kính */
+    /* Từng thẻ áo */
     .vault-card {
-      background: rgba(15, 15, 25, 0.35); /* Kính trong suốt nhìn xuyên qua video */
+      background: rgba(15, 15, 25, 0.35);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border: 1.5px solid rgba(254, 44, 85, 0.35);
@@ -304,7 +297,7 @@
       flex-direction: column;
       gap: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.35); /* Vùng mã & nút mua mờ nhẹ */
+      background: rgba(0, 0, 0, 0.35);
       flex: 1;
       justify-content: space-between;
     }
@@ -737,27 +730,21 @@
   <div class="bg-overlay"></div>
 
   <div class="container">
-    <div class="nav-bar">
-      <span style="font-size: 0.95rem; color: #00f0ff; font-weight: 700; text-shadow: 0 0 10px rgba(0,240,255,0.6);">
-        <i class="fa-solid fa-shirt"></i> Kho áo của Chía 💗
-      </span>
-    </div>
-
     <div class="card-border-wrapper">
       <main class="card">
         <header style="text-align: center; margin-bottom: 16px;">
           <h1 style="font-size: 1.3rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 12px rgba(0,240,255,0.6);">
-            <i class="fa-solid fa-shirt"></i> DANH SÁCH ACC CÓ SẴN
+            <i class="fa-solid fa-shirt"></i> DANH SÁCH ÁO CÓ SẴN
           </h1>
           <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
-            Nhấn <strong>"MUA ACC"</strong> hoặc thêm nhiều acc vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗
+            Nhấn <strong>"MUA ÁO"</strong> hoặc thêm nhiều áo vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗
           </p>
         </header>
 
         <!-- Ô Tìm kiếm -->
         <div class="vault-search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="vaultSearchInput" placeholder="Tìm kiếm mã tài khoản (#xxxxx)..." autocomplete="off">
+          <input type="text" id="vaultSearchInput" placeholder="Tìm kiếm mã áo (#xxxxx)..." autocomplete="off">
           <button type="button" id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">
             <i class="fa-solid fa-xmark"></i>
           </button>
@@ -804,13 +791,13 @@
           </div>
         </div>
 
-        <!-- Grid Acc -->
+        <!-- Grid Acc / Áo -->
         <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
 
         <!-- Empty State -->
         <div id="vaultEmpty" style="display: none; text-align: center; padding: 30px 10px; color: #ccc;">
           <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px;"></i>
-          <p>Không tìm thấy tài khoản phù hợp!</p>
+          <p>Không tìm thấy mẫu áo phù hợp!</p>
         </div>
       </main>
     </div>
@@ -848,7 +835,7 @@
           <span id="cartTotalPrice" class="cart-total-price">0đ</span>
         </div>
         <button class="btn-checkout" onclick="checkoutSelectedCart()">
-          <i class="fa-brands fa-tiktok"></i> MUA CÁC ACC ĐÃ CHỌN
+          <i class="fa-brands fa-tiktok"></i> MUA CÁC ÁO ĐÃ CHỌN
         </button>
       </div>
     </div>
@@ -952,7 +939,7 @@
       } catch (err) {
         console.error("Lỗi Supabase:", err);
         if (skeletonEl) {
-          skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể kết nối danh sách tài khoản!</p>`;
+          skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể kết nối danh sách!</p>`;
         }
       }
     }
@@ -1049,7 +1036,7 @@
         const buyBtn = document.createElement('button');
         buyBtn.className = 'btn-buy-acc';
         buyBtn.type = 'button';
-        buyBtn.innerHTML = '<i class="fa-brands fa-tiktok"></i> MUA ACC';
+        buyBtn.innerHTML = '<i class="fa-brands fa-tiktok"></i> MUA ÁO';
         buyBtn.onclick = () => selectAndOrderSingle(acc.title, priceText);
 
         const addCartBtn = document.createElement('button');
@@ -1183,19 +1170,19 @@
     async function checkoutSelectedCart() {
       const selected = cart.filter(item => item.selected !== false);
       if (selected.length === 0) {
-        showToast('Vui lòng chọn ít nhất 1 tài khoản để mua!');
+        showToast('Vui lòng chọn ít nhất 1 áo để mua!');
         return;
       }
 
       const total = selected.reduce((sum, item) => sum + (item.price || 0), 0);
       const codesList = selected.map(item => `• ${item.title} (${formatPrice(item.price)})`).join('\n');
 
-      const message = `🌸 YÊU CẦU MUA NHIỀU TÀI KHOẢN 🌸
-Danh sách acc đã chọn:
+      const message = `🌸 YÊU CẦU ĐẶT NHIỀU ÁO 🌸
+Danh sách áo đã chọn:
 ${codesList}
 ---------------------------
 💰 TỔNG CỘNG: ${formatPrice(total)}
-👉 Mình muốn mua các tài khoản trên, Chía kiểm tra và chốt đơn giúp mình nhé 💗`;
+👉 Mình muốn mua các mẫu áo trên, Chía kiểm tra và chốt đơn giúp mình nhé 💗`;
 
       await writeClipboardText(message);
       showToast('Đã copy đơn hàng! Đang mở TikTok...');
@@ -1203,12 +1190,12 @@ ${codesList}
     }
 
     async function selectAndOrderSingle(accCode, accPrice) {
-      const message = `🌸 YÊU CẦU MUA TÀI KHOẢN 🌸
-- Mã tài khoản: ${accCode}
+      const message = `🌸 YÊU CẦU MUA ÁO 🌸
+- Mã sản phẩm: ${accCode}
 - Giá: ${accPrice}
 - Kênh liên hệ: Kho áo của Chía (@${TIKTOK_USERNAME})
 ---------------------------
-👉 Mình muốn mua tài khoản ${accCode} này, bạn kiểm tra giúp mình nhé 💗`;
+👉 Mình muốn mua áo mã ${accCode} này, bạn kiểm tra giúp mình nhé 💗`;
 
       await writeClipboardText(message);
       showToast(`Đã copy ${accCode}! Đang mở TikTok...`);
