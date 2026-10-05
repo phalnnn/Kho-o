@@ -92,8 +92,8 @@
     .chibi-sitter-left {
       position: absolute;
       top: -55px;
-      left: 12px;
-      width: 90px;
+      left: 6px;
+      width: 75px;
       height: auto;
       z-index: 10;
       pointer-events: none;
@@ -102,12 +102,12 @@
       user-select: none;
     }
 
-    /* Chibi ngồi góc phải */
+    /* Chibi ngồi góc phải: Tinh chỉnh nhỏ gọn trên mobile để tránh che chữ */
     .chibi-sitter-right {
       position: absolute;
-      top: -55px;
-      right: 12px;
-      width: 80px;
+      top: -58px;
+      right: 0px;
+      width: 65px;
       height: auto;
       z-index: 10;
       pointer-events: none;
@@ -187,6 +187,30 @@
 
     @media (min-width: 768px) {
       .card { padding: 28px 24px; }
+    }
+
+    /* Header tiêu đề có padding hai bên để không cấn chibi */
+    .card-header-main {
+      text-align: center;
+      margin-bottom: 16px;
+      padding: 0 45px;
+    }
+
+    .card-header-main h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #00f0ff;
+      text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+      line-height: 1.35;
+    }
+
+    @media (min-width: 768px) {
+      .card-header-main {
+        padding: 0 10px;
+      }
+      .card-header-main h1 {
+        font-size: 1.35rem;
+      }
     }
 
     .vault-search-box {
@@ -792,13 +816,13 @@
     <!-- Chibi ngồi góc trái -->
     <img src="chibi.png" alt="Chía Chibi Trái" class="chibi-sitter-left">
 
-    <!-- Chibi ngồi góc phải (Đã đổi sang chibi-right1.png) -->
+    <!-- Chibi ngồi góc phải -->
     <img src="chibi-right1.png" alt="Chía Chibi Phải" class="chibi-sitter-right">
 
     <div class="card-border-wrapper">
       <main class="card">
-        <header style="text-align: center; margin-bottom: 16px;">
-          <h1 style="font-size: 1.3rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 12px rgba(0,240,255,0.6);">
+        <header class="card-header-main">
+          <h1>
             <i class="fa-solid fa-shirt"></i> DANH SÁCH ÁO CÓ SẴN
           </h1>
           <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
