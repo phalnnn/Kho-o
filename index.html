@@ -27,7 +27,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      padding: 24px 12px 90px;
+      padding: 55px 12px 90px; /* Thêm padding trên để chừa khoảng trống cho chibi ngồi */
       background: #000;
       overflow-x: hidden;
       color: #ffffff;
@@ -73,11 +73,38 @@
 
     @media (min-width: 768px) {
       .container { max-width: 860px; }
-      body { padding: 32px 20px 80px; }
+      body { padding: 65px 20px 80px; }
     }
 
     @media (min-width: 1100px) {
       .container { max-width: 1140px; }
+    }
+
+    /* Chibi ngồi ở mép trên bên trái */
+    .chibi-sitter {
+      position: absolute;
+      top: -55px; /* Ngồi đè lên mép card */
+      left: 12px;
+      width: 90px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+      animation: chibiBounce 3.5s ease-in-out infinite;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .chibi-sitter {
+        top: -72px;
+        left: 20px;
+        width: 120px;
+      }
+    }
+
+    @keyframes chibiBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
     }
 
     /* Viền RGB quay mép ngoài, giữa rỗng để xuyên thấu video */
@@ -730,6 +757,9 @@
   <div class="bg-overlay"></div>
 
   <div class="container">
+    <!-- Ảnh Chibi ngồi ở góc trên bên trái mép khung -->
+    <img src="chibi.png" alt="Chía Chibi" class="chibi-sitter">
+
     <div class="card-border-wrapper">
       <main class="card">
         <header style="text-align: center; margin-bottom: 16px;">
@@ -791,7 +821,7 @@
           </div>
         </div>
 
-        <!-- Grid Acc / Áo -->
+        <!-- Grid Áo -->
         <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
 
         <!-- Empty State -->
