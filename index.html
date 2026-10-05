@@ -28,20 +28,37 @@
       justify-content: center;
       align-items: flex-start;
       padding: 24px 12px 90px;
-      background: linear-gradient(-45deg, #050507, #fe2c55, #121216, #1c1c24, #000000);
-      background-size: 400% 400%;
-      animation: redWhiteBlackGradient 10s ease infinite;
+      background: #000;
       overflow-x: hidden;
       color: #ffffff;
+      position: relative;
     }
 
-    @keyframes redWhiteBlackGradient {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+    /* Video Background toàn màn hình */
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      z-index: -2;
+      pointer-events: none;
     }
 
-    /* Co giãn khung: Mobile 540px, Tablet 850px, PC lên đến 1140px */
+    /* Lớp phủ tối nhẹ để tăng tương phản chữ */
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: -1;
+      pointer-events: none;
+    }
+
+    /* Co giãn khung: Mobile 540px, Tablet 860px, PC lên đến 1140px */
     .container {
       width: 100%;
       max-width: 540px;
@@ -50,6 +67,8 @@
       gap: 16px;
       align-items: center;
       transition: max-width 0.25s ease;
+      position: relative;
+      z-index: 1;
     }
 
     @media (min-width: 768px) {
@@ -68,7 +87,7 @@
       align-items: center;
     }
 
-    /* Viền RGB quay mượt mà không bao giờ bị đè tràn trên PC */
+    /* Viền RGB quay mượt mà, nền trong suốt để video lộ xuyên qua */
     .card-border-wrapper {
       position: relative;
       width: 100%;
@@ -78,8 +97,8 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #0d0d12;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9),
+      background: transparent;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8),
                   0 0 25px rgba(254, 44, 85, 0.35);
     }
 
@@ -98,12 +117,14 @@
       100% { transform: rotate(360deg); }
     }
 
+    /* Card bọc ngoài: Kính mờ trong suốt (Glassmorphism) */
     .card {
       position: relative;
       width: 100%;
-      background: rgba(14, 14, 20, 0.94);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      background: rgba(14, 14, 20, 0.68);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 25px;
       padding: 22px 14px;
       z-index: 1;
@@ -122,7 +143,7 @@
     .vault-search-box input {
       width: 100%;
       padding: 11px 40px 11px 40px;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.55);
       border: 1px solid rgba(254, 44, 85, 0.4);
       border-radius: 12px;
       color: #fff;
@@ -134,6 +155,7 @@
     .vault-search-box input:focus {
       border-color: #00f0ff;
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+      background: rgba(0, 0, 0, 0.75);
     }
 
     .vault-search-box i.search-icon {
@@ -188,6 +210,8 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
 
     .chip-btn.active {
@@ -213,12 +237,15 @@
       .vault-grid, .skeleton-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
     }
 
+    /* Từng thẻ Acc bán trong suốt */
     .vault-card {
-      background: rgba(16, 16, 24, 0.95);
-      border: 1.5px solid rgba(254, 44, 85, 0.35);
+      background: rgba(18, 18, 26, 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1.5px solid rgba(254, 44, 85, 0.38);
       border-radius: 16px;
       overflow: hidden;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.75);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       display: flex;
       flex-direction: column;
@@ -234,7 +261,7 @@
       position: relative;
       width: 100%;
       aspect-ratio: 4 / 4.8;
-      background: #09090c;
+      background: rgba(9, 9, 12, 0.7);
       overflow: hidden;
       cursor: pointer;
     }
@@ -271,7 +298,7 @@
       flex-direction: column;
       gap: 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(10, 10, 16, 0.45);
       flex: 1;
       justify-content: space-between;
     }
@@ -358,16 +385,17 @@
 
     /* Skeleton Loading UI */
     .skeleton-card {
-      background: rgba(20, 20, 30, 0.8);
+      background: rgba(20, 20, 30, 0.5);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 16px;
       overflow: hidden;
+      backdrop-filter: blur(10px);
     }
 
     .skeleton-img {
       width: 100%;
       aspect-ratio: 4 / 4.8;
-      background: linear-gradient(90deg, #181824 25%, #252538 50%, #181824 75%);
+      background: linear-gradient(90deg, rgba(24, 24, 36, 0.6) 25%, rgba(40, 40, 60, 0.8) 50%, rgba(24, 24, 36, 0.6) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -382,7 +410,7 @@
     .skeleton-line {
       height: 16px;
       border-radius: 4px;
-      background: linear-gradient(90deg, #181824 25%, #252538 50%, #181824 75%);
+      background: linear-gradient(90deg, rgba(24, 24, 36, 0.6) 25%, rgba(40, 40, 60, 0.8) 50%, rgba(24, 24, 36, 0.6) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -390,7 +418,7 @@
     .skeleton-btn {
       height: 34px;
       border-radius: 8px;
-      background: linear-gradient(90deg, #181824 25%, #252538 50%, #181824 75%);
+      background: linear-gradient(90deg, rgba(24, 24, 36, 0.6) 25%, rgba(40, 40, 60, 0.8) 50%, rgba(24, 24, 36, 0.6) 75%);
       background-size: 200% 100%;
       animation: shimmer 1.5s infinite;
     }
@@ -466,7 +494,9 @@
       width: 100%;
       max-width: 500px;
       max-height: 82vh;
-      background: #121218;
+      background: rgba(18, 18, 24, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(254, 44, 85, 0.4);
       border-bottom: none;
       border-radius: 24px 24px 0 0;
@@ -545,7 +575,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      background: rgba(255, 255, 255, 0.04);
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: 12px;
       padding: 8px 10px;
@@ -692,6 +722,12 @@
   </style>
 </head>
 <body>
+
+  <!-- Video Background & Overlay -->
+  <video class="bg-video" autoplay loop muted playsinline poster="avatar.jpg">
+    <source src="bg.mp4" type="video/mp4">
+  </video>
+  <div class="bg-overlay"></div>
 
   <div class="container">
     <div class="nav-bar">
@@ -860,7 +896,6 @@
     async function initSupabase() {
       loadSavedCart();
 
-      // Kiểm tra nạp thư viện Supabase an toàn
       const checkLibrary = () => {
         return window.supabase && typeof window.supabase.createClient === 'function';
       };
@@ -1078,7 +1113,7 @@
 
         const img = document.createElement('img');
         img.className = 'cart-item-img';
-        img.src = item.image || 'bg-profile.jpg';
+        img.src = item.image || 'avatar.jpg';
         img.alt = item.title;
 
         const info = document.createElement('div');
