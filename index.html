@@ -497,7 +497,7 @@
       100% { background-position: 200% 0; }
     }
 
-    /* NÚT GIỎ HÀNG NỔI THÔNG MINH (BUNG NHÃN TỔNG TIỀN) */
+    /* NÚT GIỎ HÀNG NỔI (BUNG NHÃN TỔNG TIỀN) */
     .floating-cart-btn {
       position: fixed;
       bottom: 24px;
@@ -568,7 +568,6 @@
       transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    /* Rung nảy badge khi có item bay vào */
     .cart-badge.cart-pop {
       animation: badgePop 0.45s ease-out;
     }
@@ -580,7 +579,6 @@
       100% { transform: scale(1); }
     }
 
-    /* HIỆU ỨNG FLY-TO-CART CLONE */
     .flying-cart-clone {
       position: fixed;
       z-index: 10000;
@@ -936,6 +934,182 @@
       color: #ddd;
     }
 
+    /* ========================================================
+       NÚT CSKH & KHUNG CHAT LIVE
+       ======================================================== */
+    .floating-cskh-btn {
+      position: fixed;
+      bottom: 24px;
+      left: 20px;
+      background: linear-gradient(135deg, #5865F2, #7289da);
+      color: #fff;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .floating-cskh-btn:hover {
+      transform: scale(1.08);
+    }
+    .floating-cskh-btn:active {
+      transform: scale(0.92);
+    }
+
+    .cskh-chat-modal {
+      position: fixed;
+      bottom: 88px;
+      left: 20px;
+      width: calc(100vw - 40px);
+      max-width: 360px;
+      height: 480px;
+      max-height: 75vh;
+      background: rgba(16, 16, 26, 0.9);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(88, 101, 242, 0.5);
+      border-radius: 20px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(88, 101, 242, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cskh-chat-modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .cskh-header {
+      background: rgba(88, 101, 242, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cskh-header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #00f0ff;
+    }
+
+    .cskh-online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+    }
+
+    .btn-close-cskh {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .cskh-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .chat-bubble.admin {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-bottom-left-radius: 2px;
+    }
+
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #5865F2, #7289da);
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-bubble-time {
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .cskh-footer {
+      padding: 10px 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .cskh-footer input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 0.86rem;
+      outline: none;
+    }
+
+    .cskh-footer input:focus {
+      border-color: #5865F2;
+    }
+
+    .btn-send-cskh {
+      background: #5865F2;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: transform 0.15s;
+    }
+
+    .btn-send-cskh:active {
+      transform: scale(0.9);
+    }
+
     /* Toast thông báo */
     .toast-msg {
       position: fixed;
@@ -1050,6 +1224,36 @@
     </div>
   </div>
 
+  <!-- Nút CSKH Trực Tuyến Nổi (Góc Trái Dưới) -->
+  <button class="floating-cskh-btn" onclick="toggleCskhModal()" title="Hỗ trợ & CSKH">
+    <i class="fa-solid fa-headset"></i>
+  </button>
+
+  <!-- Khung Chat CSKH Live -->
+  <div id="cskhChatModal" class="cskh-chat-modal">
+    <div class="cskh-header">
+      <div class="cskh-header-title">
+        <span class="cskh-online-dot"></span>
+        <span>Hỗ trợ Chía 💗</span>
+      </div>
+      <button class="btn-close-cskh" onclick="toggleCskhModal(false)">&times;</button>
+    </div>
+
+    <div id="cskhChatBody" class="cskh-body">
+      <!-- Tin nhắn chào mặc định -->
+      <div class="chat-bubble admin">
+        Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+      </div>
+    </div>
+
+    <form class="cskh-footer" onsubmit="handleSendCskhMessage(event)">
+      <input type="text" id="cskhInputText" placeholder="Nhập tin nhắn..." autocomplete="off">
+      <button type="submit" class="btn-send-cskh">
+        <i class="fa-solid fa-paper-plane"></i>
+      </button>
+    </form>
+  </div>
+
   <!-- Nút Giỏ Hàng Nổi (Tự bung thông tin: Số áo + Tổng tiền) -->
   <button id="floatingCartBtn" class="floating-cart-btn" onclick="toggleCartDrawer(true)" title="Xem giỏ hàng">
     <div class="cart-icon-main">
@@ -1129,6 +1333,9 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaWpta296dHF0aG92dmtsYW1tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NDQ1NzksImV4cCI6MjEwNjQyMDU3OX0.6ZyBSLuXhQNC-nm1nCBTEZMs5Y3FDE83xD8lvL0HRUk';
     const TIKTOK_USERNAME = 'phalnnn';
 
+    // Thay URL Webhook Discord của bạn vào đây:
+    const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1347854681033564042/g6zGo1cguRarXTGua83Tp2eT1wY3g2oAWZgESaIefR5almQ';
+
     let _supabase = null;
     let vaultAccounts = [];
     let cart = [];
@@ -1138,6 +1345,13 @@
     let redirectTimer = null;
     let countdownInterval = null;
     let pillScrollTimeout = null;
+
+    // Quản lý định danh phiên chat của khách
+    let chatSessionId = localStorage.getItem('chia_chat_session_id');
+    if (!chatSessionId) {
+      chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('chia_chat_session_id', chatSessionId);
+    }
 
     function showToast(text) {
       const toast = document.getElementById('toast');
@@ -1169,7 +1383,6 @@
       const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
       label.textContent = `${cart.length} áo • ${formatPrice(total)}`;
 
-      // Tự động bung nhẹ thanh thông tin khi có sản phẩm
       if (cart.length > 0) {
         btn.classList.add('show-pill');
       } else {
@@ -1177,7 +1390,6 @@
       }
     }
 
-    /* Hiệu ứng bay vào giỏ hàng (Fly to Cart) */
     function triggerFlyToCartAnimation(sourceImgElement) {
       if (!sourceImgElement) return;
 
@@ -1187,7 +1399,6 @@
       const startRect = sourceImgElement.getBoundingClientRect();
       const targetRect = cartBtn.getBoundingClientRect();
 
-      // Tạo phần tử clone bay
       const clone = document.createElement('img');
       clone.src = sourceImgElement.src;
       clone.className = 'flying-cart-clone';
@@ -1199,7 +1410,6 @@
 
       document.body.appendChild(clone);
 
-      // Tính điểm đích (tâm nút giỏ hàng)
       const targetX = targetRect.left + (targetRect.width / 2) - 15;
       const targetY = targetRect.top + (targetRect.height / 2) - 15;
 
@@ -1212,16 +1422,13 @@
 
       setTimeout(() => {
         clone.remove();
-        // Rung nảy badge và bung thanh thông tin
         badge.classList.remove('cart-pop');
-        void badge.offsetWidth; // Force reflow
+        void badge.offsetWidth;
         badge.classList.add('cart-pop');
-
         cartBtn.classList.add('show-pill');
       }, 750);
     }
 
-    /* Bung thanh tổng tiền khi cuộn trang */
     window.addEventListener('scroll', () => {
       const btn = document.getElementById('floatingCartBtn');
       if (cart.length === 0) return;
@@ -1229,7 +1436,6 @@
       btn.classList.add('show-pill');
       clearTimeout(pillScrollTimeout);
 
-      // Giữ hiển thị khi cuộn, tự co về sau 2.5s không cuộn
       pillScrollTimeout = setTimeout(() => {
         if (window.innerWidth < 480) {
           btn.classList.remove('show-pill');
@@ -1252,6 +1458,7 @@
             clearInterval(interval);
             _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             await fetchVaultAccounts();
+            initRealtimeChat();
           } else if (attempts > 50) {
             clearInterval(interval);
             console.error("Không tải được thư viện Supabase");
@@ -1264,6 +1471,7 @@
       } else {
         _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         await fetchVaultAccounts();
+        initRealtimeChat();
       }
     }
 
@@ -1418,7 +1626,6 @@
       cart.push({ ...acc, selected: true });
       saveCart();
 
-      // Kích hoạt hiệu ứng ảnh bay vào icon giỏ
       if (imgElement) {
         triggerFlyToCartAnimation(imgElement);
       }
@@ -1517,7 +1724,6 @@
       selectAllCb.checked = cart.length > 0 && selectedItems.length === cart.length;
     }
 
-    /* Mở TikTok */
     function openTikTokApp() {
       const appUrl = `snssdk1180://user/profile?unique_id=${TIKTOK_USERNAME}`;
       const webUrl = `https://www.tiktok.com/@${TIKTOK_USERNAME}`;
@@ -1528,7 +1734,6 @@
       }, 500);
     }
 
-    /* Đếm ngược 10 giây trước khi chuyển tiếp */
     function showOrderNoticeModal() {
       const modal = document.getElementById('orderNoticeModal');
       const counterEl = document.getElementById('redirectCount');
@@ -1601,6 +1806,126 @@ ${codesList}
       showOrderNoticeModal();
     }
 
+    /* ========================================================
+       LOGIC KHUNG CHAT LIVE & DISCORD WEBHOOK
+       ======================================================== */
+    function toggleCskhModal(forceState) {
+      const modal = document.getElementById('cskhChatModal');
+      const isActive = forceState !== undefined ? forceState : !modal.classList.contains('active');
+      if (isActive) {
+        modal.classList.add('active');
+        loadChatHistory();
+      } else {
+        modal.classList.remove('active');
+      }
+    }
+
+    async function loadChatHistory() {
+      if (!_supabase) return;
+      try {
+        const { data, error } = await _supabase
+          .from('chat_messages')
+          .select('sender, content, created_at')
+          .eq('session_id', chatSessionId)
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        const body = document.getElementById('cskhChatBody');
+        body.innerHTML = `
+          <div class="chat-bubble admin">
+            Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+          </div>
+        `;
+
+        (data || []).forEach(msg => appendMessageUI(msg.sender, msg.content, msg.created_at));
+        body.scrollTop = body.scrollHeight;
+      } catch (e) {
+        console.warn("Chưa khởi tạo bảng chat_messages trên Supabase:", e);
+      }
+    }
+
+    function initRealtimeChat() {
+      if (!_supabase) return;
+      _supabase
+        .channel('public:chat_messages')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `session_id=eq.${chatSessionId}`
+        }, payload => {
+          const msg = payload.new;
+          if (msg.sender === 'admin') {
+            appendMessageUI('admin', msg.content, msg.created_at);
+            const body = document.getElementById('cskhChatBody');
+            body.scrollTop = body.scrollHeight;
+          }
+        })
+        .subscribe();
+    }
+
+    function appendMessageUI(sender, text, timestamp) {
+      const body = document.getElementById('cskhChatBody');
+      const bubble = document.createElement('div');
+      bubble.className = `chat-bubble ${sender}`;
+
+      const timeStr = timestamp ? new Date(timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }) : '';
+      bubble.innerHTML = `
+        <div>${text}</div>
+        <div class="chat-bubble-time">${timeStr}</div>
+      `;
+      body.appendChild(bubble);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    async function handleSendCskhMessage(e) {
+      e.preventDefault();
+      const input = document.getElementById('cskhInputText');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      appendMessageUI('user', text, new Date());
+
+      if (_supabase) {
+        try {
+          await _supabase.from('chat_messages').insert({
+            session_id: chatSessionId,
+            sender: 'user',
+            content: text
+          });
+        } catch (err) {
+          console.error("Lỗi lưu Supabase:", err);
+        }
+      }
+
+      if (DISCORD_WEBHOOK_URL && !DISCORD_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID')) {
+        try {
+          await fetch(DISCORD_WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              username: 'Khách Hàng (Web Chía)',
+              avatar_url: 'https://cdn-icons-png.flaticon.com/512/847/847969.png',
+              embeds: [{
+                title: '💬 Tin nhắn CSKH mới từ Website',
+                color: 0xfe2c55,
+                fields: [
+                  { name: 'Mã khách (Session)', value: `\`${chatSessionId}\``, inline: true },
+                  { name: 'Nội dung', value: text }
+                ],
+                footer: { text: 'Kho áo của Chía 💗' },
+                timestamp: new Date().toISOString()
+              }]
+            })
+          });
+        } catch (err) {
+          console.error("Lỗi gửi Webhook Discord:", err);
+        }
+      }
+    }
+
     const searchInput = document.getElementById('vaultSearchInput');
     const searchClearBtn = document.getElementById('searchClearBtn');
 
@@ -1670,6 +1995,7 @@ ${codesList}
         closeImageModal();
         toggleCartDrawer(false);
         closeOrderNoticeModal();
+        toggleCskhModal(false);
       }
     });
 
