@@ -1240,10 +1240,7 @@
     </div>
 
     <div id="cskhChatBody" class="cskh-body">
-      <!-- Tin nhắn chào mặc định -->
-      <div class="chat-bubble admin">
-        Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
-      </div>
+      <!-- Lịch sử tin nhắn sẽ nạp ở đây -->
     </div>
 
     <form class="cskh-footer" onsubmit="handleSendCskhMessage(event)">
@@ -1336,6 +1333,9 @@
     // Thay URL Webhook Discord của bạn vào đây:
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1556846947611054181/5r1jFTCmgmv-gFv3_TJYnZVNuBHor2Pf22HbZjBpZclmyKEQp1dkpYhKKVlUAJ4vMEH7';
 
+    // Tin nhắn tự động trả lời khi khách nhắn tin đầu tiên
+    const AUTO_REPLY_MESSAGE = "Chào bạn! 💕 Cảm ơn bạn đã ghé qua. Bạn cần tụi mình hỗ trợ vấn đề gì cứ nhắn thoải mái ở đây nha, mình sẽ tới ngay đây! 🚀";
+
     let _supabase = null;
     let vaultAccounts = [];
     let cart = [];
@@ -1352,6 +1352,9 @@
       chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
       localStorage.setItem('chia_chat_session_id', chatSessionId);
     }
+
+    // Đánh dấu đã gửi tin tự động cho phiên này chưa
+    let autoReplySent = localStorage.getItem('chia_auto_replied_' + chatSessionId) === 'true';
 
     function showToast(text) {
       const toast = document.getElementById('toast');
@@ -1832,13 +1835,17 @@ ${codesList}
         if (error) throw error;
 
         const body = document.getElementById('cskhChatBody');
-        body.innerHTML = `
-          <div class="chat-bubble admin">
-            Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
-          </div>
-        `;
+        body.innerHTML = '';
 
-        (data || []).forEach(msg => appendMessageUI(msg.sender, msg.content, msg.created_at));
+        const messages = data || [];
+        messages.forEach(msg => appendMessageUI(msg.sender, msg.content, msg.created_at));
+
+        // Nếu trong lịch sử đã có tin nhắn trả lời tự động hoặc từ admin thì cập nhật trạng thái
+        if (messages.some(m => m.sender === 'admin')) {
+          autoReplySent = true;
+          localStorage.setItem('chia_auto_replied_' + chatSessionId, 'true');
+        }
+
         body.scrollTop = body.scrollHeight;
       } catch (e) {
         console.warn("Chưa khởi tạo bảng chat_messages trên Supabase:", e);
@@ -1898,6 +1905,27 @@ ${codesList}
         } catch (err) {
           console.error("Lỗi lưu Supabase:", err);
         }
+      }
+
+      // Xử lý gửi phản hồi tự động nếu là tin nhắn đầu tiên của khách
+      if (!autoReplySent) {
+        autoReplySent = true;
+        localStorage.setItem('chia_auto_replied_' + chatSessionId, 'true');
+
+        setTimeout(async () => {
+          appendMessageUI('admin', AUTO_REPLY_MESSAGE, new Date());
+          if (_supabase) {
+            try {
+              await _supabase.from('chat_messages').insert({
+                session_id: chatSessionId,
+                sender: 'admin',
+                content: AUTO_REPLY_MESSAGE
+              });
+            } catch (err) {
+              console.error("Lỗi lưu tin nhắn phản hồi tự động vào Supabase:", err);
+            }
+          }
+        }, 600);
       }
 
       if (DISCORD_WEBHOOK_URL && !DISCORD_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID')) {
