@@ -894,7 +894,6 @@
 
     .order-modal-actions {
       display: flex;
-      flex-direction: border-box;
       flex-direction: column;
       gap: 10px;
     }
@@ -1241,7 +1240,7 @@
     </div>
 
     <div id="cskhChatBody" class="cskh-body">
-      <!-- Tin nhắn chào cố định ban đầu -->
+      <!-- Tin nhắn chào cố định -->
       <div class="chat-bubble admin">
         Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
       </div>
@@ -1347,10 +1346,9 @@
     let countdownInterval = null;
     let pillScrollTimeout = null;
 
-    // Biến đếm tin nhắn của khách trong phiên làm việc hiện tại
+    // Đếm tin nhắn gửi trong phiên client hiện tại
     let clientMessageCount = 0;
 
-    // Mã session cho phiên khách
     let chatSessionId = localStorage.getItem('chia_chat_session_id');
     if (!chatSessionId) {
       chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
@@ -1462,6 +1460,7 @@
             clearInterval(interval);
             _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             await fetchVaultAccounts();
+            initRealtimeChat();
           } else if (attempts > 50) {
             clearInterval(interval);
             console.error("Không tải được thư viện Supabase");
@@ -1474,6 +1473,7 @@
       } else {
         _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         await fetchVaultAccounts();
+        initRealtimeChat();
       }
     }
 
@@ -1809,16 +1809,64 @@ ${codesList}
     }
 
     /* ========================================================
-       LOGIC KHUNG CHAT CSKH LIVE & TỰ ĐỘNG PHẢN HỒI CLIENT-SIDE
+       LOGIC KHUNG CHAT LIVE, ĐỒNG BỘ SUPABASE & TỰ ĐỘNG CHÀO
        ======================================================== */
     function toggleCskhModal(forceState) {
       const modal = document.getElementById('cskhChatModal');
       const isActive = forceState !== undefined ? forceState : !modal.classList.contains('active');
       if (isActive) {
         modal.classList.add('active');
+        loadChatHistory();
       } else {
         modal.classList.remove('active');
       }
+    }
+
+    // Tải toàn bộ lịch sử trò chuyện của session này từ Supabase
+    async function loadChatHistory() {
+      if (!_supabase) return;
+      try {
+        const { data, error } = await _supabase
+          .from('chat_messages')
+          .select('sender, content, created_at')
+          .eq('session_id', chatSessionId)
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        const body = document.getElementById('cskhChatBody');
+        body.innerHTML = `
+          <div class="chat-bubble admin">
+            Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+          </div>
+        `;
+
+        (data || []).forEach(msg => appendMessageUI(msg.sender, msg.content, msg.created_at));
+        body.scrollTop = body.scrollHeight;
+      } catch (e) {
+        console.warn("Chưa tải được lịch sử chat:", e);
+      }
+    }
+
+    // Lắng nghe tin nhắn phản hồi từ Admin/Discord theo thời gian thực (Realtime)
+    function initRealtimeChat() {
+      if (!_supabase) return;
+      _supabase
+        .channel('public:chat_messages')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `session_id=eq.${chatSessionId}`
+        }, payload => {
+          const msg = payload.new;
+          if (msg.sender === 'admin') {
+            appendMessageUI('admin', msg.content, msg.created_at);
+            const body = document.getElementById('cskhChatBody');
+            body.scrollTop = body.scrollHeight;
+          }
+        })
+        .subscribe();
     }
 
     function appendMessageUI(sender, text, timestamp) {
@@ -1847,18 +1895,40 @@ ${codesList}
       appendMessageUI('user', text, new Date());
       clientMessageCount++;
 
-      // 2. Tự động phản hồi ngay trên giao diện ở tin nhắn đầu tiên (không cần qua Supabase)
+      // 2. Lưu tin nhắn của khách vào Supabase
+      if (_supabase) {
+        try {
+          await _supabase.from('chat_messages').insert({
+            session_id: chatSessionId,
+            sender: 'user',
+            content: text
+          });
+        } catch (err) {
+          console.error("Lỗi lưu Supabase:", err);
+        }
+      }
+
+      // 3. Tự động phản hồi tin chào ở tin nhắn đầu tiên của khách
       if (clientMessageCount === 1) {
-        setTimeout(() => {
-          appendMessageUI(
-            'admin',
-            'Chào bạn! 💕 Cảm ơn bạn đã ghé qua. Bạn cần tụi mình hỗ trợ vấn đề gì cứ nhắn thoải mái ở đây nha, mình sẽ tới ngay đây! 🚀',
-            new Date()
-          );
+        setTimeout(async () => {
+          const autoMsg = 'Chào bạn! 💕 Cảm ơn bạn đã ghé qua. Bạn cần tụi mình hỗ trợ vấn đề gì cứ nhắn thoải mái ở đây nha, mình sẽ tới ngay đây! 🚀';
+          appendMessageUI('admin', autoMsg, new Date());
+          
+          if (_supabase) {
+            try {
+              await _supabase.from('chat_messages').insert({
+                session_id: chatSessionId,
+                sender: 'admin',
+                content: autoMsg
+              });
+            } catch (err) {
+              console.error("Lỗi lưu tin tự động vào Supabase:", err);
+            }
+          }
         }, 500);
       }
 
-      // 3. Chuyển tiếp nội dung sang Discord Webhook
+      // 4. Đẩy nội dung sang Discord Webhook để quản trị viên đọc & trả lời
       if (DISCORD_WEBHOOK_URL && !DISCORD_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID')) {
         try {
           await fetch(DISCORD_WEBHOOK_URL, {
