@@ -1240,7 +1240,7 @@
     </div>
 
     <div id="cskhChatBody" class="cskh-body">
-      <!-- Tin nhắn chào cố định -->
+      <!-- Tin nhắn chào mở đầu -->
       <div class="chat-bubble admin">
         Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
       </div>
@@ -1346,7 +1346,7 @@
     let countdownInterval = null;
     let pillScrollTimeout = null;
 
-    // Đếm tin nhắn gửi trong phiên client hiện tại
+    // Đếm tin nhắn gửi trong phiên hiện tại
     let clientMessageCount = 0;
 
     let chatSessionId = localStorage.getItem('chia_chat_session_id');
@@ -1909,22 +1909,11 @@ ${codesList}
       }
 
       // 3. Tự động phản hồi tin chào ở tin nhắn đầu tiên của khách
+      // (Chỉ vẽ trực tiếp trên UI, không insert vào Supabase để tránh việc Realtime bắt lại làm trùng lặp 2 tin)
       if (clientMessageCount === 1) {
-        setTimeout(async () => {
+        setTimeout(() => {
           const autoMsg = 'Chào bạn! 💕 Cảm ơn bạn đã ghé qua. Bạn cần tụi mình hỗ trợ vấn đề gì cứ nhắn thoải mái ở đây nha, mình sẽ tới ngay đây! 🚀';
           appendMessageUI('admin', autoMsg, new Date());
-          
-          if (_supabase) {
-            try {
-              await _supabase.from('chat_messages').insert({
-                session_id: chatSessionId,
-                sender: 'admin',
-                content: autoMsg
-              });
-            } catch (err) {
-              console.error("Lỗi lưu tin tự động vào Supabase:", err);
-            }
-          }
         }, 500);
       }
 
