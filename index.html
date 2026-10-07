@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kho áo của Chía 💗</title>
+  <title>Kho áo & Nạp Game của Chía 💗</title>
   <link rel="icon" href="avatar.jpg" type="image/jpeg">
 
   <link rel="preconnect" href="https://llijmkoztqthovvklamm.supabase.co" crossorigin>
@@ -34,7 +34,6 @@
       position: relative;
     }
 
-    /* Video Background toàn màn hình */
     .bg-video {
       position: fixed;
       top: 0;
@@ -59,7 +58,7 @@
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.28);
       z-index: -1;
       pointer-events: none;
     }
@@ -85,7 +84,6 @@
       .container { max-width: 1140px; }
     }
 
-    /* Chibi ngồi góc trái & phải */
     .chibi-sitter-left {
       position: absolute;
       top: -55px;
@@ -170,7 +168,7 @@
     .card {
       position: relative;
       width: 100%;
-      background: rgba(15, 15, 25, 0.28);
+      background: rgba(15, 15, 25, 0.32);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
       border-radius: 26px;
@@ -183,10 +181,51 @@
       .card { padding: 28px 24px; }
     }
 
+    /* Thanh chọn Danh Mục Chính: Áo vs WuWa */
+    .main-category-switcher {
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .btn-cat-switch {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: #aaa;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .btn-cat-switch.active {
+      background: linear-gradient(135deg, #fe2c55, #ff0055);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(254, 44, 85, 0.5);
+    }
+
+    .btn-cat-switch.wuwa-active {
+      background: linear-gradient(135deg, #00f0ff, #0099ff);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.5);
+    }
+
     .card-header-main {
       text-align: center;
       margin-bottom: 16px;
-      padding: 0 45px;
+      padding: 0 20px;
     }
 
     .card-header-main h1 {
@@ -198,7 +237,6 @@
     }
 
     @media (min-width: 768px) {
-      .card-header-main { padding: 0 10px; }
       .card-header-main h1 { font-size: 1.35rem; }
     }
 
@@ -222,6 +260,10 @@
       -webkit-backdrop-filter: blur(6px);
     }
 
+    .vault-search-box.wuwa-theme input {
+      border-color: rgba(0, 240, 255, 0.5);
+    }
+
     .vault-search-box input:focus {
       border-color: #00f0ff;
       box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
@@ -234,6 +276,10 @@
       top: 50%;
       transform: translateY(-50%);
       color: #fe2c55;
+    }
+
+    .vault-search-box.wuwa-theme i.search-icon {
+      color: #00f0ff;
     }
 
     .search-clear-btn {
@@ -290,6 +336,13 @@
       box-shadow: 0 0 10px rgba(254, 44, 85, 0.6);
     }
 
+    .chip-btn.active-wuwa {
+      background: #00f0ff;
+      border-color: #00f0ff;
+      color: #000;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+    }
+
     .vault-grid, .skeleton-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -316,6 +369,10 @@
       transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       display: flex;
       flex-direction: column;
+    }
+
+    .vault-card.wuwa-card {
+      border-color: rgba(0, 240, 255, 0.4);
     }
 
     .vault-card:hover {
@@ -360,6 +417,18 @@
       box-shadow: 0 0 10px rgba(252, 238, 10, 0.3);
     }
 
+    .vault-type-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 240, 255, 0.85);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
     .vault-card-body {
       padding: 12px;
       display: flex;
@@ -379,7 +448,7 @@
     }
 
     .vault-code {
-      font-size: 1rem;
+      font-size: 0.96rem;
       font-weight: 800;
       color: #fe2c55;
       letter-spacing: 0.5px;
@@ -387,6 +456,10 @@
       overflow: hidden;
       text-overflow: ellipsis;
       text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .vault-code.wuwa-title {
+      color: #00f0ff;
     }
 
     .btn-icon-copy {
@@ -432,6 +505,12 @@
       gap: 5px;
       box-shadow: 0 4px 14px rgba(254, 44, 85, 0.4);
       transition: all 0.2s;
+    }
+
+    .btn-buy-acc.btn-buy-wuwa {
+      background: linear-gradient(135deg, #00f0ff, #0099ff);
+      color: #000;
+      box-shadow: 0 4px 14px rgba(0, 240, 255, 0.4);
     }
 
     .btn-buy-acc:active { transform: scale(0.97); }
@@ -497,7 +576,7 @@
       100% { background-position: 200% 0; }
     }
 
-    /* NÚT GIỎ HÀNG NỔI (BUNG NHÃN TỔNG TIỀN) */
+    /* Giỏ hàng Floating */
     .floating-cart-btn {
       position: fixed;
       bottom: 24px;
@@ -590,7 +669,7 @@
       transition: all 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
 
-    /* Modal / Drawer Giỏ hàng */
+    /* Drawer Giỏ hàng */
     .cart-drawer-overlay {
       position: fixed;
       inset: 0;
@@ -934,9 +1013,7 @@
       color: #ddd;
     }
 
-    /* ========================================================
-       NÚT CSKH & KHUNG CHAT LIVE
-       ======================================================== */
+    /* CSKH Live */
     .floating-cskh-btn {
       position: fixed;
       bottom: 24px;
@@ -1110,7 +1187,6 @@
       transform: scale(0.9);
     }
 
-    /* Toast thông báo */
     .toast-msg {
       position: fixed;
       bottom: 24px;
@@ -1153,17 +1229,28 @@
 
     <div class="card-border-wrapper">
       <main class="card">
+        
+        <!-- Thanh chọn Danh Mục Chính: Áo vs WuWa -->
+        <div class="main-category-switcher">
+          <button id="catBtnShirts" class="btn-cat-switch active" onclick="switchMainCategory('shirts')">
+            <i class="fa-solid fa-shirt"></i> KHO ÁO CÓ SẴN
+          </button>
+          <button id="catBtnWuwa" class="btn-cat-switch" onclick="switchMainCategory('wuwa')">
+            <i class="fa-solid fa-gem"></i> NẠP GAME WUWA
+          </button>
+        </div>
+
         <header class="card-header-main">
-          <h1>
+          <h1 id="headerTitleText">
             <i class="fa-solid fa-shirt"></i> DANH SÁCH ÁO CÓ SẴN
           </h1>
-          <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
+          <p id="headerSubText" style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
             Nhấn <strong>"MUA ÁO"</strong> hoặc thêm nhiều áo vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗
           </p>
         </header>
 
         <!-- Ô Tìm kiếm -->
-        <div class="vault-search-box">
+        <div id="searchBoxContainer" class="vault-search-box">
           <i class="fa-solid fa-magnifying-glass search-icon"></i>
           <input type="text" id="vaultSearchInput" placeholder="Tìm kiếm mã áo (#xxxxx)..." autocomplete="off">
           <button type="button" id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">
@@ -1172,7 +1259,7 @@
         </div>
 
         <!-- Chips bộ lọc -->
-        <div class="filter-chips">
+        <div class="filter-chips" id="filterChipsContainer">
           <button class="chip-btn active" data-filter="all">Tất cả</button>
           <button class="chip-btn" data-filter="under100">Dưới 100k</button>
           <button class="chip-btn" data-filter="100to300">100k - 300k</button>
@@ -1212,13 +1299,13 @@
           </div>
         </div>
 
-        <!-- Grid Áo -->
+        <!-- Grid Sản Phẩm (Áo / Gói WuWa) -->
         <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
 
         <!-- Empty State -->
         <div id="vaultEmpty" style="display: none; text-align: center; padding: 30px 10px; color: #ccc;">
           <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px;"></i>
-          <p>Không tìm thấy mẫu áo phù hợp!</p>
+          <p id="emptyMsgText">Không tìm thấy mẫu áo phù hợp!</p>
         </div>
       </main>
     </div>
@@ -1240,9 +1327,8 @@
     </div>
 
     <div id="cskhChatBody" class="cskh-body">
-      <!-- Tin nhắn chào mặc định -->
       <div class="chat-bubble admin">
-        Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+        Chào bạn! Bạn cần tư vấn về áo hay gói nạp game cứ nhắn cho Chía ở đây nhé 💗
       </div>
     </div>
 
@@ -1254,12 +1340,12 @@
     </form>
   </div>
 
-  <!-- Nút Giỏ Hàng Nổi (Tự bung thông tin: Số áo + Tổng tiền) -->
+  <!-- Nút Giỏ Hàng Nổi -->
   <button id="floatingCartBtn" class="floating-cart-btn" onclick="toggleCartDrawer(true)" title="Xem giỏ hàng">
     <div class="cart-icon-main">
       <i class="fa-solid fa-bag-shopping"></i>
     </div>
-    <span id="cartLabelExpanded" class="cart-label-expanded">0 áo • 0đ</span>
+    <span id="cartLabelExpanded" class="cart-label-expanded">0 món • 0đ</span>
     <span id="cartCountBadge" class="cart-badge">0</span>
   </button>
 
@@ -1289,7 +1375,7 @@
           <span id="cartTotalPrice" class="cart-total-price">0đ</span>
         </div>
         <button class="btn-checkout" onclick="checkoutSelectedCart()">
-          <i class="fa-brands fa-tiktok"></i> MUA CÁC ÁO ĐÃ CHỌN
+          <i class="fa-brands fa-tiktok"></i> MUA CÁC MỤC ĐÃ CHỌN
         </button>
       </div>
     </div>
@@ -1333,11 +1419,12 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaWpta296dHF0aG92dmtsYW1tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NDQ1NzksImV4cCI6MjEwNjQyMDU3OX0.6ZyBSLuXhQNC-nm1nCBTEZMs5Y3FDE83xD8lvL0HRUk';
     const TIKTOK_USERNAME = 'phalnnn';
 
-    // Thay URL Webhook Discord của bạn vào đây:
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1556846947611054181/5r1jFTCmgmv-gFv3_TJYnZVNuBHor2Pf22HbZjBpZclmyKEQp1dkpYhKKVlUAJ4vMEH7';
 
     let _supabase = null;
+    let currentCategory = 'shirts'; // 'shirts' hoặc 'wuwa'
     let vaultAccounts = [];
+    let wuwaPackages = [];
     let cart = [];
     let currentFilter = 'all';
     let searchQuery = '';
@@ -1346,7 +1433,6 @@
     let countdownInterval = null;
     let pillScrollTimeout = null;
 
-    // Quản lý định danh phiên chat của khách
     let chatSessionId = localStorage.getItem('chia_chat_session_id');
     if (!chatSessionId) {
       chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
@@ -1379,9 +1465,8 @@
       const btn = document.getElementById('floatingCartBtn');
 
       badge.textContent = cart.length;
-
       const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
-      label.textContent = `${cart.length} áo • ${formatPrice(total)}`;
+      label.textContent = `${cart.length} món • ${formatPrice(total)}`;
 
       if (cart.length > 0) {
         btn.classList.add('show-pill');
@@ -1457,7 +1542,7 @@
           if (checkLibrary()) {
             clearInterval(interval);
             _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            await fetchVaultAccounts();
+            await fetchAllData();
             initRealtimeChat();
           } else if (attempts > 50) {
             clearInterval(interval);
@@ -1470,37 +1555,62 @@
         }, 80);
       } else {
         _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        await fetchVaultAccounts();
+        await fetchAllData();
         initRealtimeChat();
       }
     }
 
-    async function fetchVaultAccounts() {
+    async function fetchAllData() {
       const skeletonEl = document.getElementById('vaultSkeleton');
-
       try {
-        const { data, error } = await _supabase
-          .from('accounts')
-          .select('id, title, image, price')
-          .eq('is_sold', false)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        vaultAccounts = (data || []).map(row => ({
-          id: row.id,
-          title: String(row.title || 'Chưa đặt tên'),
-          image: row.image || '',
-          price: parseFloat(row.price) || 0
-        }));
-
+        await Promise.all([fetchVaultShirts(), fetchWuwaPackages()]);
         if (skeletonEl) skeletonEl.style.display = 'none';
         applyFiltersAndRender();
       } catch (err) {
         console.error("Lỗi Supabase:", err);
         if (skeletonEl) {
-          skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể kết nối danh sách!</p>`;
+          skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể kết nối dữ liệu!</p>`;
         }
+      }
+    }
+
+    async function fetchVaultShirts() {
+      const { data, error } = await _supabase
+        .from('accounts')
+        .select('id, title, image, price')
+        .eq('is_sold', false)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      vaultAccounts = (data || []).map(row => ({
+        id: 'acc_' + row.id,
+        rawId: row.id,
+        type: 'shirt',
+        title: String(row.title || 'Mẫu áo chưa đặt tên'),
+        image: row.image || '',
+        price: parseFloat(row.price) || 0
+      }));
+    }
+
+    async function fetchWuwaPackages() {
+      try {
+        const { data, error } = await _supabase
+          .from('wuwa_packages')
+          .select('id, title, price, image')
+          .order('price', { ascending: true });
+
+        if (error) throw error;
+        wuwaPackages = (data || []).map(row => ({
+          id: 'wuwa_' + row.id,
+          rawId: row.id,
+          type: 'wuwa',
+          title: String(row.title || 'Gói Nạp WuWa'),
+          image: row.image || '',
+          price: parseFloat(row.price) || 0
+        }));
+      } catch (e) {
+        console.warn("Chưa tạo bảng wuwa_packages trên Supabase hoặc lỗi nạp:", e);
+        wuwaPackages = [];
       }
     }
 
@@ -1508,35 +1618,79 @@
       return num > 0 ? num.toLocaleString('vi-VN') + 'đ' : 'Liên hệ';
     }
 
+    /* Đổi Danh Mục Chính: Áo vs WuWa */
+    function switchMainCategory(cat) {
+      currentCategory = cat;
+      const btnShirts = document.getElementById('catBtnShirts');
+      const btnWuwa = document.getElementById('catBtnWuwa');
+      const headerTitle = document.getElementById('headerTitleText');
+      const headerSub = document.getElementById('headerSubText');
+      const searchBox = document.getElementById('searchBoxContainer');
+      const searchInput = document.getElementById('vaultSearchInput');
+      const chips = document.querySelectorAll('.chip-btn');
+
+      chips.forEach(b => {
+        b.classList.remove('active', 'active-wuwa');
+        if (b.dataset.filter === 'all') {
+          b.classList.add(cat === 'shirts' ? 'active' : 'active-wuwa');
+        }
+      });
+      currentFilter = 'all';
+
+      if (cat === 'shirts') {
+        btnShirts.className = 'btn-cat-switch active';
+        btnWuwa.className = 'btn-cat-switch';
+        headerTitle.innerHTML = `<i class="fa-solid fa-shirt"></i> DANH SÁCH ÁO CÓ SẴN`;
+        headerTitle.style.color = '#00f0ff';
+        headerSub.innerHTML = `Nhấn <strong>"MUA ÁO"</strong> hoặc thêm nhiều áo vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗`;
+        searchBox.className = 'vault-search-box';
+        searchInput.placeholder = 'Tìm kiếm mã áo (#xxxxx)...';
+      } else {
+        btnWuwa.className = 'btn-cat-switch wuwa-active';
+        btnShirts.className = 'btn-cat-switch';
+        headerTitle.innerHTML = `<i class="fa-solid fa-gem"></i> BẢNG GIÁ NẠP GAME WUWA`;
+        headerTitle.style.color = '#00f0ff';
+        headerSub.innerHTML = `Nạp an toàn 100%, nhanh gọn uy tín. Nhấn <strong>"NẠP NGAY"</strong> để chốt đơn nhé 💗`;
+        searchBox.className = 'vault-search-box wuwa-theme';
+        searchInput.placeholder = 'Tìm kiếm gói nạp (Thẻ tháng, Lunite...)...';
+      }
+
+      applyFiltersAndRender();
+    }
+
     function applyFiltersAndRender() {
-      let filtered = [...vaultAccounts];
+      let sourceList = currentCategory === 'shirts' ? [...vaultAccounts] : [...wuwaPackages];
 
       if (searchQuery) {
-        filtered = filtered.filter(acc => acc.title.toLowerCase().includes(searchQuery));
+        sourceList = sourceList.filter(item => item.title.toLowerCase().includes(searchQuery));
       }
 
       if (currentFilter === 'under100') {
-        filtered = filtered.filter(acc => acc.price > 0 && acc.price < 100000);
+        sourceList = sourceList.filter(item => item.price > 0 && item.price < 100000);
       } else if (currentFilter === '100to300') {
-        filtered = filtered.filter(acc => acc.price >= 100000 && acc.price <= 300000);
+        sourceList = sourceList.filter(item => item.price >= 100000 && item.price <= 300000);
       } else if (currentFilter === 'over300') {
-        filtered = filtered.filter(acc => acc.price > 300000);
+        sourceList = sourceList.filter(item => item.price > 300000);
       } else if (currentFilter === 'sortAsc') {
-        filtered.sort((a, b) => a.price - b.price);
+        sourceList.sort((a, b) => a.price - b.price);
       }
 
-      renderVaultAccounts(filtered);
+      renderCurrentGrid(sourceList);
     }
 
-    function renderVaultAccounts(list) {
+    function renderCurrentGrid(list) {
       const gridEl = document.getElementById('vaultGrid');
       const emptyEl = document.getElementById('vaultEmpty');
+      const emptyMsg = document.getElementById('emptyMsgText');
 
       gridEl.replaceChildren();
 
       if (list.length === 0) {
         gridEl.style.display = 'none';
         emptyEl.style.display = 'block';
+        emptyMsg.textContent = currentCategory === 'shirts' 
+          ? 'Không tìm thấy mẫu áo phù hợp!' 
+          : 'Chưa có gói nạp WuWa phù hợp!';
         return;
       }
 
@@ -1545,33 +1699,40 @@
 
       const fragment = document.createDocumentFragment();
 
-      list.forEach(acc => {
+      list.forEach(item => {
         const card = document.createElement('div');
-        card.className = 'vault-card';
+        card.className = `vault-card ${item.type === 'wuwa' ? 'wuwa-card' : ''}`;
 
-        const priceText = formatPrice(acc.price);
+        const priceText = formatPrice(item.price);
 
         const imgWrap = document.createElement('div');
         imgWrap.className = 'vault-img-wrap';
 
         let cardImgEl = null;
-        if (acc.image) {
+        if (item.image) {
           const img = document.createElement('img');
           img.className = 'vault-img';
-          img.src = acc.image;
-          img.alt = acc.title;
+          img.src = item.image;
+          img.alt = item.title;
           img.loading = 'lazy';
           imgWrap.appendChild(img);
-          imgWrap.onclick = () => openZoomImage(acc.image);
+          imgWrap.onclick = () => openZoomImage(item.image);
           cardImgEl = img;
         } else {
           imgWrap.innerHTML = `<div style="height:100%;display:flex;align-items:center;justify-content:center;color:#aaa;font-size:0.8rem;"><i class="fa-solid fa-image"></i>&nbsp;Không có ảnh</div>`;
         }
 
-        const badge = document.createElement('span');
-        badge.className = 'vault-price-badge';
-        badge.textContent = priceText;
-        imgWrap.appendChild(badge);
+        const priceBadge = document.createElement('span');
+        priceBadge.className = 'vault-price-badge';
+        priceBadge.textContent = priceText;
+        imgWrap.appendChild(priceBadge);
+
+        if (item.type === 'wuwa') {
+          const typeBadge = document.createElement('span');
+          typeBadge.className = 'vault-type-badge';
+          typeBadge.textContent = 'WUWA';
+          imgWrap.appendChild(typeBadge);
+        }
 
         const body = document.createElement('div');
         body.className = 'vault-card-body';
@@ -1580,15 +1741,15 @@
         titleRow.className = 'vault-title-row';
 
         const titleEl = document.createElement('span');
-        titleEl.className = 'vault-code';
-        titleEl.textContent = acc.title;
+        titleEl.className = `vault-code ${item.type === 'wuwa' ? 'wuwa-title' : ''}`;
+        titleEl.textContent = item.title;
 
         const copyBtn = document.createElement('button');
         copyBtn.className = 'btn-icon-copy';
         copyBtn.type = 'button';
-        copyBtn.title = 'Copy mã';
+        copyBtn.title = 'Copy tên/mã';
         copyBtn.innerHTML = '<i class="fa-regular fa-copy"></i>';
-        copyBtn.onclick = () => copyAccCode(acc.title, copyBtn);
+        copyBtn.onclick = () => copyAccCode(item.title, copyBtn);
 
         titleRow.append(titleEl, copyBtn);
 
@@ -1596,17 +1757,19 @@
         actionsRow.className = 'card-actions-row';
 
         const buyBtn = document.createElement('button');
-        buyBtn.className = 'btn-buy-acc';
+        buyBtn.className = `btn-buy-acc ${item.type === 'wuwa' ? 'btn-buy-wuwa' : ''}`;
         buyBtn.type = 'button';
-        buyBtn.innerHTML = '<i class="fa-brands fa-tiktok"></i> MUA ÁO';
-        buyBtn.onclick = () => selectAndOrderSingle(acc.title, priceText);
+        buyBtn.innerHTML = item.type === 'wuwa' 
+          ? '<i class="fa-solid fa-bolt"></i> NẠP NGAY' 
+          : '<i class="fa-brands fa-tiktok"></i> MUA ÁO';
+        buyBtn.onclick = () => selectAndOrderSingle(item.title, priceText, item.type);
 
         const addCartBtn = document.createElement('button');
         addCartBtn.className = 'btn-add-cart';
         addCartBtn.type = 'button';
         addCartBtn.title = 'Thêm vào giỏ hàng';
         addCartBtn.innerHTML = '<i class="fa-solid fa-cart-plus"></i>';
-        addCartBtn.onclick = () => addToCart(acc, cardImgEl);
+        addCartBtn.onclick = () => addToCart(item, cardImgEl);
 
         actionsRow.append(buyBtn, addCartBtn);
         body.append(titleRow, actionsRow);
@@ -1617,20 +1780,20 @@
       gridEl.appendChild(fragment);
     }
 
-    function addToCart(acc, imgElement) {
-      const exists = cart.find(item => item.id === acc.id);
+    function addToCart(item, imgElement) {
+      const exists = cart.find(cartItem => cartItem.id === item.id);
       if (exists) {
-        showToast(`Mã ${acc.title} đã có trong giỏ hàng!`);
+        showToast(`"${item.title}" đã có trong giỏ hàng!`);
         return;
       }
-      cart.push({ ...acc, selected: true });
+      cart.push({ ...item, selected: true });
       saveCart();
 
       if (imgElement) {
         triggerFlyToCartAnimation(imgElement);
       }
 
-      showToast(`Đã thêm ${acc.title} vào giỏ hàng 💗`);
+      showToast(`Đã thêm "${item.title}" vào giỏ 💗`);
     }
 
     function toggleCartDrawer(isOpen) {
@@ -1678,7 +1841,9 @@
         const info = document.createElement('div');
         info.className = 'cart-item-info';
         info.innerHTML = `
-          <div class="cart-item-title">${item.title}</div>
+          <div class="cart-item-title" style="color:${item.type === 'wuwa' ? '#00f0ff' : '#fe2c55'}">
+            ${item.type === 'wuwa' ? '[WUWA] ' : ''}${item.title}
+          </div>
           <div class="cart-item-price">${formatPrice(item.price)}</div>
         `;
 
@@ -1775,40 +1940,48 @@
     async function checkoutSelectedCart() {
       const selected = cart.filter(item => item.selected !== false);
       if (selected.length === 0) {
-        showToast('Vui lòng chọn ít nhất 1 áo để mua!');
+        showToast('Vui lòng chọn ít nhất 1 mục để mua/nạp!');
         return;
       }
 
       const total = selected.reduce((sum, item) => sum + (item.price || 0), 0);
-      const codesList = selected.map(item => `• ${item.title} (${formatPrice(item.price)})`).join('\n');
+      const codesList = selected.map(item => `• [${item.type === 'wuwa' ? 'NẠP WUWA' : 'ÁO'}] ${item.title} (${formatPrice(item.price)})`).join('\n');
 
-      const message = `🌸 YÊU CẦU ĐẶT NHIỀU ÁO 🌸
-Danh sách áo đã chọn:
+      const message = `🌸 YÊU CẦU ĐẶT HÀNG / NẠP GAME 🌸
+Danh sách các mục đã chọn:
 ${codesList}
 ---------------------------
 💰 TỔNG CỘNG: ${formatPrice(total)}
-👉 Mình muốn mua các mẫu áo trên, Chía kiểm tra và chốt đơn giúp mình nhé 💗`;
+👉 Mình muốn đặt các mục trên, Chía kiểm tra và hỗ trợ giúp mình nhé 💗`;
 
       await writeClipboardText(message);
       toggleCartDrawer(false);
       showOrderNoticeModal();
     }
 
-    async function selectAndOrderSingle(accCode, accPrice) {
-      const message = `🌸 YÊU CẦU MUA ÁO 🌸
-- Mã sản phẩm: ${accCode}
-- Giá: ${accPrice}
+    async function selectAndOrderSingle(title, price, type = 'shirt') {
+      let message = '';
+      if (type === 'wuwa') {
+        message = `⚡ YÊU CẦU NẠP WUTHERING WAVES ⚡
+- Gói nạp: ${title}
+- Giá: ${price}
+- Kênh liên hệ: Kho của Chía (@${TIKTOK_USERNAME})
+---------------------------
+👉 Mình muốn nạp gói ${title} này, bạn hướng dẫn mình gửi tài khoản nhé 💗`;
+      } else {
+        message = `🌸 YÊU CẦU MUA ÁO 🌸
+- Mã sản phẩm: ${title}
+- Giá: ${price}
 - Kênh liên hệ: Kho áo của Chía (@${TIKTOK_USERNAME})
 ---------------------------
-👉 Mình muốn mua áo mã ${accCode} này, bạn kiểm tra giúp mình nhé 💗`;
+👉 Mình muốn mua áo mã ${title} này, bạn kiểm tra giúp mình nhé 💗`;
+      }
 
       await writeClipboardText(message);
       showOrderNoticeModal();
     }
 
-    /* ========================================================
-       LOGIC KHUNG CHAT LIVE & DISCORD WEBHOOK
-       ======================================================== */
+    /* Logic Chat Live */
     function toggleCskhModal(forceState) {
       const modal = document.getElementById('cskhChatModal');
       const isActive = forceState !== undefined ? forceState : !modal.classList.contains('active');
@@ -1834,7 +2007,7 @@ ${codesList}
         const body = document.getElementById('cskhChatBody');
         body.innerHTML = `
           <div class="chat-bubble admin">
-            Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+            Chào bạn! Bạn cần tư vấn về áo hay gói nạp game cứ nhắn cho Chía ở đây nhé 💗
           </div>
         `;
 
@@ -1915,7 +2088,7 @@ ${codesList}
                   { name: 'Mã khách (Session)', value: `\`${chatSessionId}\``, inline: true },
                   { name: 'Nội dung', value: text }
                 ],
-                footer: { text: 'Kho áo của Chía 💗' },
+                footer: { text: 'Kho áo & Nạp game của Chía 💗' },
                 timestamp: new Date().toISOString()
               }]
             })
@@ -1950,8 +2123,8 @@ ${codesList}
 
     document.querySelectorAll('.chip-btn').forEach(btn => {
       btn.addEventListener('click', () => {
-        document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+        document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active', 'active-wuwa'));
+        btn.classList.add(currentCategory === 'shirts' ? 'active' : 'active-wuwa');
         currentFilter = btn.dataset.filter;
         applyFiltersAndRender();
       });
@@ -1975,7 +2148,7 @@ ${codesList}
       await writeClipboardText(code);
       const original = btn.innerHTML;
       btn.innerHTML = `<i class="fa-solid fa-check" style="color:#00f0ff;"></i>`;
-      showToast(`Đã chép mã: ${code}`);
+      showToast(`Đã chép: ${code}`);
       setTimeout(() => { btn.innerHTML = original; }, 1400);
     }
 
