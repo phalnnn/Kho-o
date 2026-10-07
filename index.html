@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Kho áo của Chía 💗</title>
+  <title>Kho áo & Nạp WuWa của Chía 💗</title>
   <link rel="icon" href="avatar.jpg" type="image/jpeg">
 
   <link rel="preconnect" href="https://llijmkoztqthovvklamm.supabase.co" crossorigin>
@@ -133,6 +133,49 @@
     @keyframes chibiBounceRight {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-4px); }
+    }
+
+    /* Nút Tab Chuyển Đổi Trang */
+    .main-tab-nav {
+      display: flex;
+      width: 100%;
+      background: rgba(15, 15, 25, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 6px;
+      gap: 6px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+    }
+
+    .tab-switch-btn {
+      flex: 1;
+      padding: 11px 16px;
+      border: none;
+      border-radius: 14px;
+      background: transparent;
+      color: #ccc;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .tab-switch-btn.active {
+      background: linear-gradient(135deg, #fe2c55, #ff0055);
+      color: #fff;
+      box-shadow: 0 4px 16px rgba(254, 44, 85, 0.45);
+    }
+
+    .tab-switch-btn.wuwa.active {
+      background: linear-gradient(135deg, #00f0ff, #0077ff);
+      box-shadow: 0 4px 16px rgba(0, 240, 255, 0.45);
+      color: #000;
     }
 
     .card-border-wrapper {
@@ -451,6 +494,92 @@
     }
 
     .btn-add-cart:active { transform: scale(0.92); }
+
+    /* ========================================================
+       PHẦN NẠP GAME WUTHERING WAVES (WUWA)
+       ======================================================== */
+    .wuwa-pack-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    @media (min-width: 480px) {
+      .wuwa-pack-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 768px) {
+      .wuwa-pack-grid { grid-template-columns: repeat(3, 1fr); gap: 14px; }
+    }
+
+    .wuwa-card {
+      background: rgba(16, 20, 36, 0.55);
+      border: 1.5px solid rgba(0, 240, 255, 0.35);
+      border-radius: 16px;
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+    }
+
+    .wuwa-card:hover {
+      border-color: #00f0ff;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.3);
+      background: rgba(22, 28, 48, 0.65);
+    }
+
+    .wuwa-icon {
+      font-size: 2rem;
+      color: #00f0ff;
+      margin-bottom: 2px;
+    }
+
+    .wuwa-pack-name {
+      font-size: 0.96rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .wuwa-pack-bonus {
+      font-size: 0.78rem;
+      color: #00ff88;
+      font-weight: 600;
+    }
+
+    .wuwa-pack-price {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #fcee0a;
+      text-shadow: 0 0 10px rgba(252, 238, 10, 0.4);
+      margin: 4px 0 6px;
+    }
+
+    .btn-nap-wuwa {
+      width: 100%;
+      padding: 9px;
+      background: linear-gradient(135deg, #00f0ff, #0088ff);
+      border: none;
+      border-radius: 10px;
+      color: #000;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: transform 0.15s ease;
+      box-shadow: 0 4px 14px rgba(0, 240, 255, 0.4);
+    }
+
+    .btn-nap-wuwa:active {
+      transform: scale(0.97);
+    }
 
     /* Skeleton Loading UI */
     .skeleton-card {
@@ -1151,75 +1280,193 @@
     <!-- Chibi ngồi góc phải -->
     <img src="chibi-right1.png" alt="Chía Chibi Phải" class="chibi-sitter-right">
 
+    <!-- THANH CHUYỂN TAB: KHO ÁO / NẠP WUWA -->
+    <nav class="main-tab-nav">
+      <button class="tab-switch-btn active" id="tabBtnClothing" onclick="switchMainTab('clothing')">
+        <i class="fa-solid fa-shirt"></i> Kho Áo Của Chía
+      </button>
+      <button class="tab-switch-btn wuwa" id="tabBtnWuwa" onclick="switchMainTab('wuwa')">
+        <i class="fa-solid fa-bolt"></i> Nạp Game WuWa
+      </button>
+    </nav>
+
+    <!-- KHUNG CHÍNH (CARD WRAPPER) -->
     <div class="card-border-wrapper">
       <main class="card">
-        <header class="card-header-main">
-          <h1>
-            <i class="fa-solid fa-shirt"></i> DANH SÁCH ÁO CÓ SẴN
-          </h1>
-          <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
-            Nhấn <strong>"MUA ÁO"</strong> hoặc thêm nhiều áo vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗
-          </p>
-        </header>
+        
+        <!-- ======================= PHẦN 1: KHO ÁO ======================= -->
+        <section id="sectionClothing">
+          <header class="card-header-main">
+            <h1>
+              <i class="fa-solid fa-shirt"></i> DANH SÁCH ÁO CÓ SẴN
+            </h1>
+            <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
+              Nhấn <strong>"MUA ÁO"</strong> hoặc thêm nhiều áo vào <strong>GIỎ HÀNG</strong> để đặt 1 lượt nhé 💗
+            </p>
+          </header>
 
-        <!-- Ô Tìm kiếm -->
-        <div class="vault-search-box">
-          <i class="fa-solid fa-magnifying-glass search-icon"></i>
-          <input type="text" id="vaultSearchInput" placeholder="Tìm kiếm mã áo (#xxxxx)..." autocomplete="off">
-          <button type="button" id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">
-            <i class="fa-solid fa-xmark"></i>
-          </button>
-        </div>
+          <!-- Ô Tìm kiếm áo -->
+          <div class="vault-search-box">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="vaultSearchInput" placeholder="Tìm kiếm mã áo (#xxxxx)..." autocomplete="off">
+            <button type="button" id="searchClearBtn" class="search-clear-btn" onclick="clearSearchInput()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
 
-        <!-- Chips bộ lọc -->
-        <div class="filter-chips">
-          <button class="chip-btn active" data-filter="all">Tất cả</button>
-          <button class="chip-btn" data-filter="under100">Dưới 100k</button>
-          <button class="chip-btn" data-filter="100to300">100k - 300k</button>
-          <button class="chip-btn" data-filter="over300">Trên 300k</button>
-          <button class="chip-btn" data-filter="sortAsc">Giá rẻ trước</button>
-        </div>
+          <!-- Chips bộ lọc -->
+          <div class="filter-chips">
+            <button class="chip-btn active" data-filter="all">Tất cả</button>
+            <button class="chip-btn" data-filter="under100">Dưới 100k</button>
+            <button class="chip-btn" data-filter="100to300">100k - 300k</button>
+            <button class="chip-btn" data-filter="over300">Trên 300k</button>
+            <button class="chip-btn" data-filter="sortAsc">Giá rẻ trước</button>
+          </div>
 
-        <!-- Skeleton Loading -->
-        <div id="vaultSkeleton" class="skeleton-grid">
-          <div class="skeleton-card">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line" style="width: 60%;"></div>
-              <div class="skeleton-btn"></div>
+          <!-- Skeleton Loading -->
+          <div id="vaultSkeleton" class="skeleton-grid">
+            <div class="skeleton-card">
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line" style="width: 60%;"></div>
+                <div class="skeleton-btn"></div>
+              </div>
+            </div>
+            <div class="skeleton-card">
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line" style="width: 50%;"></div>
+                <div class="skeleton-btn"></div>
+              </div>
+            </div>
+            <div class="skeleton-card">
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line" style="width: 70%;"></div>
+                <div class="skeleton-btn"></div>
+              </div>
+            </div>
+            <div class="skeleton-card">
+              <div class="skeleton-img"></div>
+              <div class="skeleton-body">
+                <div class="skeleton-line" style="width: 45%;"></div>
+                <div class="skeleton-btn"></div>
+              </div>
             </div>
           </div>
-          <div class="skeleton-card">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line" style="width: 50%;"></div>
-              <div class="skeleton-btn"></div>
-            </div>
-          </div>
-          <div class="skeleton-card">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line" style="width: 70%;"></div>
-              <div class="skeleton-btn"></div>
-            </div>
-          </div>
-          <div class="skeleton-card">
-            <div class="skeleton-img"></div>
-            <div class="skeleton-body">
-              <div class="skeleton-line" style="width: 45%;"></div>
-              <div class="skeleton-btn"></div>
-            </div>
-          </div>
-        </div>
 
-        <!-- Grid Áo -->
-        <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
+          <!-- Grid Áo -->
+          <div id="vaultGrid" class="vault-grid" style="display: none;"></div>
 
-        <!-- Empty State -->
-        <div id="vaultEmpty" style="display: none; text-align: center; padding: 30px 10px; color: #ccc;">
-          <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px;"></i>
-          <p>Không tìm thấy mẫu áo phù hợp!</p>
-        </div>
+          <!-- Empty State -->
+          <div id="vaultEmpty" style="display: none; text-align: center; padding: 30px 10px; color: #ccc;">
+            <i class="fa-solid fa-box-open" style="font-size: 2rem; margin-bottom: 8px;"></i>
+            <p>Không tìm thấy mẫu áo phù hợp!</p>
+          </div>
+        </section>
+
+        <!-- ======================= PHẦN 2: NẠP WUWA ======================= -->
+        <section id="sectionWuwa" style="display: none;">
+          <header class="card-header-main">
+            <h1 style="color: #00f0ff;">
+              <i class="fa-solid fa-bolt"></i> DỊCH VỤ NẠP WUTHERING WAVES
+            </h1>
+            <p style="font-size: 0.82rem; color: #eee; margin-top: 4px; text-shadow: 0 1px 4px rgba(0,0,0,0.8);">
+              Nạp Lunite / Thẻ Tháng an toàn, uy tín & nhanh chóng qua TikTok của Chía 🚀
+            </p>
+          </header>
+
+          <div class="wuwa-pack-grid">
+            <!-- Thẻ Tháng -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-calendar-check"></i></div>
+              <div class="wuwa-pack-name">Thẻ Tháng (Lunite Subscription)</div>
+              <div class="wuwa-pack-bonus">Nhận 300 Lunite + 90 Astrite/ngày</div>
+              <div class="wuwa-pack-price">105.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('Thẻ Tháng Lunite Subscription', '105.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Battle Pass -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-shield-halved"></i></div>
+              <div class="wuwa-pack-name">Battle Pass (Insider Channel)</div>
+              <div class="wuwa-pack-bonus">Vũ khí 4 sao + Rất nhiều tài nguyên</div>
+              <div class="wuwa-pack-price">220.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('Battle Pass (Insider Channel)', '220.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Gói 60 Lunite -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="wuwa-pack-name">60 Lunite</div>
+              <div class="wuwa-pack-bonus">X2 lần đầu = 120 Lunite</div>
+              <div class="wuwa-pack-price">25.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('60 Lunite', '25.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Gói 300+30 Lunite -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="wuwa-pack-name">300 + 30 Lunite</div>
+              <div class="wuwa-pack-bonus">X2 lần đầu = 600 Lunite</div>
+              <div class="wuwa-pack-price">115.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('300 + 30 Lunite', '115.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Gói 980+110 Lunite -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="wuwa-pack-name">980 + 110 Lunite</div>
+              <div class="wuwa-pack-bonus">X2 lần đầu = 1960 Lunite</div>
+              <div class="wuwa-pack-price">360.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('980 + 110 Lunite', '360.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Gói 1980+260 Lunite -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="wuwa-pack-name">1980 + 260 Lunite</div>
+              <div class="wuwa-pack-bonus">X2 lần đầu = 3960 Lunite</div>
+              <div class="wuwa-pack-price">720.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('1980 + 260 Lunite', '720.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Gói 3280+600 Lunite -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="wuwa-pack-name">3280 + 600 Lunite</div>
+              <div class="wuwa-pack-bonus">X2 lần đầu = 6560 Lunite</div>
+              <div class="wuwa-pack-price">1.190.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('3280 + 600 Lunite', '1.190.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+
+            <!-- Gói 6480+1600 Lunite -->
+            <div class="wuwa-card">
+              <div class="wuwa-icon"><i class="fa-solid fa-gem"></i></div>
+              <div class="wuwa-pack-name">6480 + 1600 Lunite</div>
+              <div class="wuwa-pack-bonus">X2 lần đầu = 12960 Lunite</div>
+              <div class="wuwa-pack-price">2.350.000đ</div>
+              <button class="btn-nap-wuwa" onclick="orderWuwaPack('6480 + 1600 Lunite', '2.350.000đ')">
+                <i class="fa-brands fa-tiktok"></i> NẠP GÓI NÀY
+              </button>
+            </div>
+          </div>
+        </section>
+
       </main>
     </div>
   </div>
@@ -1240,9 +1487,8 @@
     </div>
 
     <div id="cskhChatBody" class="cskh-body">
-      <!-- Tin nhắn chào mở đầu -->
       <div class="chat-bubble admin">
-        Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+        Chào bạn! Bạn cần tư vấn về áo, kiểm tra đơn hàng hay dịch vụ nạp game cứ nhắn cho Chía ở đây nhé 💗
       </div>
     </div>
 
@@ -1346,13 +1592,51 @@
     let countdownInterval = null;
     let pillScrollTimeout = null;
 
-    // Đếm tin nhắn gửi trong phiên hiện tại
     let clientMessageCount = 0;
+    let currentTab = 'clothing';
 
     let chatSessionId = localStorage.getItem('chia_chat_session_id');
     if (!chatSessionId) {
       chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
       localStorage.setItem('chia_chat_session_id', chatSessionId);
+    }
+
+    // Chuyển Tab giữa Kho Áo và Nạp WuWa
+    function switchMainTab(tabName) {
+      currentTab = tabName;
+      const btnClothing = document.getElementById('tabBtnClothing');
+      const btnWuwa = document.getElementById('tabBtnWuwa');
+      const secClothing = document.getElementById('sectionClothing');
+      const secWuwa = document.getElementById('sectionWuwa');
+      const floatingCart = document.getElementById('floatingCartBtn');
+
+      if (tabName === 'clothing') {
+        btnClothing.classList.add('active');
+        btnWuwa.classList.remove('active');
+        secClothing.style.display = 'block';
+        secWuwa.style.display = 'none';
+        floatingCart.style.display = 'flex';
+        updateCartBadge();
+      } else {
+        btnWuwa.classList.add('active');
+        btnClothing.classList.remove('active');
+        secClothing.style.display = 'none';
+        secWuwa.style.display = 'block';
+        floatingCart.style.display = 'none'; // Ẩn giỏ hàng khi qua tab nạp
+      }
+    }
+
+    // Đặt đơn nạp WuWa
+    async function orderWuwaPack(packName, packPrice) {
+      const message = `⚡ YÊU CẦU NẠP WUTHERING WAVES ⚡
+- Gói nạp: ${packName}
+- Giá thanh toán: ${packPrice}
+- Kênh nạp: Tiệm của Chía (@${TIKTOK_USERNAME})
+---------------------------
+👉 Mình muốn nạp gói trên, Chía hỗ trợ lấy thông tin và nạp giúp mình nhé 💗`;
+
+      await writeClipboardText(message);
+      showOrderNoticeModal();
     }
 
     function showToast(text) {
@@ -1376,6 +1660,7 @@
     }
 
     function updateCartBadge() {
+      if (currentTab !== 'clothing') return;
       const badge = document.getElementById('cartCountBadge');
       const label = document.getElementById('cartLabelExpanded');
       const btn = document.getElementById('floatingCartBtn');
@@ -1393,7 +1678,7 @@
     }
 
     function triggerFlyToCartAnimation(sourceImgElement) {
-      if (!sourceImgElement) return;
+      if (!sourceImgElement || currentTab !== 'clothing') return;
 
       const cartBtn = document.getElementById('floatingCartBtn');
       const badge = document.getElementById('cartCountBadge');
@@ -1432,6 +1717,7 @@
     }
 
     window.addEventListener('scroll', () => {
+      if (currentTab !== 'clothing') return;
       const btn = document.getElementById('floatingCartBtn');
       if (cart.length === 0) return;
 
@@ -1822,7 +2108,6 @@ ${codesList}
       }
     }
 
-    // Tải toàn bộ lịch sử trò chuyện của session này từ Supabase
     async function loadChatHistory() {
       if (!_supabase) return;
       try {
@@ -1837,7 +2122,7 @@ ${codesList}
         const body = document.getElementById('cskhChatBody');
         body.innerHTML = `
           <div class="chat-bubble admin">
-            Chào bạn! Bạn cần tư vấn về áo hay kiểm tra đơn hàng cứ nhắn cho Chía ở đây nhé 💗
+            Chào bạn! Bạn cần tư vấn về áo, kiểm tra đơn hàng hay dịch vụ nạp game cứ nhắn cho Chía ở đây nhé 💗
           </div>
         `;
 
@@ -1848,7 +2133,6 @@ ${codesList}
       }
     }
 
-    // Lắng nghe tin nhắn phản hồi từ Admin/Discord theo thời gian thực (Realtime)
     function initRealtimeChat() {
       if (!_supabase) return;
       _supabase
@@ -1891,11 +2175,9 @@ ${codesList}
 
       input.value = '';
       
-      // 1. Hiển thị tin nhắn người dùng lên khung chat
       appendMessageUI('user', text, new Date());
       clientMessageCount++;
 
-      // 2. Lưu tin nhắn của khách vào Supabase
       if (_supabase) {
         try {
           await _supabase.from('chat_messages').insert({
@@ -1908,8 +2190,6 @@ ${codesList}
         }
       }
 
-      // 3. Tự động phản hồi tin chào ở tin nhắn đầu tiên của khách
-      // (Chỉ vẽ trực tiếp trên UI, không insert vào Supabase để tránh việc Realtime bắt lại làm trùng lặp 2 tin)
       if (clientMessageCount === 1) {
         setTimeout(() => {
           const autoMsg = 'Chào bạn! 💕 Cảm ơn bạn đã ghé qua. Bạn cần tụi mình hỗ trợ vấn đề gì cứ nhắn thoải mái ở đây nha, mình sẽ tới ngay đây! 🚀';
@@ -1917,7 +2197,6 @@ ${codesList}
         }, 500);
       }
 
-      // 4. Đẩy nội dung sang Discord Webhook để quản trị viên đọc & trả lời
       if (DISCORD_WEBHOOK_URL && !DISCORD_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID')) {
         try {
           await fetch(DISCORD_WEBHOOK_URL, {
@@ -1933,7 +2212,7 @@ ${codesList}
                   { name: 'Mã khách (Session)', value: `\`${chatSessionId}\``, inline: true },
                   { name: 'Nội dung', value: text }
                 ],
-                footer: { text: 'Kho áo của Chía 💗' },
+                footer: { text: 'Kho áo & Nạp WuWa của Chía 💗' },
                 timestamp: new Date().toISOString()
               }]
             })
