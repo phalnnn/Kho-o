@@ -370,7 +370,215 @@
       background: rgba(20, 20, 35, 0.45);
     }
 
-    /* Khung ảnh Kho Áo (Giữ nguyên form đẹp mắt) */
+    /* Giao diện Thẻ WuWa theo chuẩn hình mẫu */
+    .wuwa-grid-layout {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px !important;
+    }
+
+    @media (min-width: 768px) {
+      .wuwa-grid-layout {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      .wuwa-grid-layout {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+    }
+
+    .wuwa-shop-card {
+      position: relative;
+      background: #1c1d23;
+      border: 1.5px solid #282932;
+      border-radius: 16px;
+      padding: 14px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.22s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .wuwa-shop-card:hover {
+      background: #23252d;
+      border-color: #3b82f6;
+    }
+
+    .wuwa-shop-card.selected {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 0 0 1px #2563eb, 0 6px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .wuwa-check-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.6);
+      z-index: 5;
+    }
+
+    .wuwa-shop-card.selected .wuwa-check-badge {
+      display: flex;
+    }
+
+    .wuwa-item-img-wrap {
+      width: 100%;
+      height: 125px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .wuwa-item-img {
+      max-width: 90%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+      transition: transform 0.25s ease;
+    }
+
+    .wuwa-shop-card:hover .wuwa-item-img {
+      transform: scale(1.06);
+    }
+
+    .wuwa-item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: left;
+    }
+
+    .wuwa-item-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      line-height: 1.3;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .wuwa-item-price {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2563eb;
+      letter-spacing: 0.2px;
+    }
+
+    /* Thanh Bar Thanh Toán Nổi bên dưới cho WuWa */
+    .wuwa-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0f1015;
+      border-top: 1px solid #232530;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7);
+      transform: translateY(105%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+      pointer-events: none;
+    }
+
+    .wuwa-bottom-bar.active {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .wuwa-bottom-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .wuwa-cart-icon-wrap {
+      position: relative;
+      font-size: 1.45rem;
+      color: #94a3b8;
+    }
+
+    .wuwa-cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wuwa-cart-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+
+    .wuwa-cart-count-text {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wuwa-cart-total-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #2563eb;
+    }
+
+    .btn-wuwa-checkout {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45);
+      transition: all 0.2s;
+    }
+
+    .btn-wuwa-checkout:active {
+      transform: scale(0.96);
+    }
+
+    /* Khung ảnh Kho Áo */
     .vault-img-wrap {
       position: relative;
       width: 100%;
@@ -388,7 +596,7 @@
       transition: transform 0.35s ease;
     }
 
-    /* Khung ảnh Nạp WuWa (Tinh chỉnh riêng tỷ lệ ngang đẹp, không bị tràn) */
+    /* Khung ảnh Nạp WuWa */
     .vault-card.wuwa-card .vault-img-wrap {
       aspect-ratio: 16 / 9;
       height: auto;
@@ -1015,24 +1223,43 @@
       position: fixed;
       bottom: 36px;
       left: 18px;
-      background: linear-gradient(135deg, #5865F2, #7289da);
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
       color: #fff;
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 22px;
       border: none;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.3rem;
-      box-shadow: 0 8px 25px rgba(88, 101, 242, 0.5);
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
       cursor: pointer;
-      z-index: 1000;
-      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      z-index: 1001;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     }
 
-    .floating-cskh-btn:hover { transform: scale(1.08); }
-    .floating-cskh-btn:active { transform: scale(0.92); }
+    body.wuwa-mode .floating-cskh-btn {
+      bottom: 74px;
+      left: auto;
+      right: 18px;
+    }
+
+    .floating-cskh-btn:hover { transform: scale(1.05); }
+    .floating-cskh-btn:active { transform: scale(0.94); }
+
+    body.wuwa-mode .floating-cskh-btn {
+      bottom: 24px;
+      left: auto;
+      right: 18px;
+      transition: bottom 0.28s ease, transform 0.25s ease;
+    }
+
+    body.wuwa-mode.has-cart .floating-cskh-btn {
+      bottom: 76px;
+    }
 
     .cskh-chat-modal {
       position: fixed;
@@ -1286,6 +1513,7 @@
   <!-- Nút CSKH Trực Tuyến Nổi -->
   <button class="floating-cskh-btn" onclick="toggleCskhModal()" title="Hỗ trợ & CSKH">
     <i class="fa-solid fa-headset"></i>
+    <span>CSKH</span>
   </button>
 
   <!-- Khung Chat CSKH Live -->
@@ -1320,6 +1548,23 @@
     <span id="cartLabelExpanded" class="cart-label-expanded">0 món • 0đ</span>
     <span id="cartCountBadge" class="cart-badge">0</span>
   </button>
+
+  <!-- Thanh Thanh Toán Dưới Cùng cho Nạp WuWa -->
+  <div id="wuwaBottomBar" class="wuwa-bottom-bar">
+    <div class="wuwa-bottom-left" onclick="toggleCartDrawer(true)">
+      <div class="wuwa-cart-icon-wrap">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span id="wuwaCartBadge" class="wuwa-cart-badge">0</span>
+      </div>
+      <div class="wuwa-cart-info">
+        <span class="wuwa-cart-count-text"><span id="wuwaCartItemCount">0</span> sản phẩm <i class="fa-solid fa-chevron-up" style="font-size: 0.65rem;"></i></span>
+        <span id="wuwaCartTotalPrice" class="wuwa-cart-total-text">0 đ</span>
+      </div>
+    </div>
+    <button class="btn-wuwa-checkout" onclick="checkoutSelectedCart()">
+      <i class="fa-solid fa-cart-shopping"></i> THANH TOÁN
+    </button>
+  </div>
 
   <!-- Drawer / Modal Giỏ Hàng -->
   <div id="cartDrawerOverlay" class="cart-drawer-overlay" onclick="handleOverlayClick(event)">
@@ -1439,10 +1684,49 @@
       const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
       label.textContent = `${cart.length} món • ${formatPrice(total)}`;
 
-      if (cart.length > 0) {
-        btn.classList.add('show-pill');
+      if (currentCategory === 'shirts') {
+        if (cart.length > 0) {
+          btn.classList.add('show-pill');
+        } else {
+          btn.classList.remove('show-pill');
+        }
+      }
+
+      updateWuwaBottomBar();
+    }
+
+    function updateWuwaBottomBar() {
+      const bottomBar = document.getElementById('wuwaBottomBar');
+      const floatingCart = document.getElementById('floatingCartBtn');
+      const wuwaBadge = document.getElementById('wuwaCartBadge');
+      const wuwaCount = document.getElementById('wuwaCartItemCount');
+      const wuwaTotal = document.getElementById('wuwaCartTotalPrice');
+
+      if (currentCategory === 'wuwa') {
+        floatingCart.style.display = 'none';
+        document.body.classList.add('wuwa-mode');
+
+        const wuwaItems = cart.filter(item => item.selected !== false);
+        const count = wuwaItems.length;
+        const total = wuwaItems.reduce((sum, item) => sum + (item.price || 0), 0);
+
+        wuwaBadge.textContent = count;
+        wuwaCount.textContent = count;
+        wuwaTotal.textContent = total > 0 ? total.toLocaleString('vi-VN') + ' đ' : '0 đ';
+
+        /* Chỉ hiển thị thanh thanh toán khi đã chọn ít nhất 1 gói */
+        if (count > 0) {
+          bottomBar.classList.add('active');
+          document.body.classList.add('has-cart');
+        } else {
+          bottomBar.classList.remove('active');
+          document.body.classList.remove('has-cart');
+        }
       } else {
-        btn.classList.remove('show-pill');
+        floatingCart.style.display = 'flex';
+        bottomBar.classList.remove('active');
+        document.body.classList.remove('wuwa-mode');
+        document.body.classList.remove('has-cart');
       }
     }
 
@@ -1593,11 +1877,12 @@
         btnShirts.className = 'btn-cat-switch';
         headerTitle.innerHTML = `<i class="fa-solid fa-gem"></i> BẢNG GIÁ NẠP GAME WUWA`;
         headerTitle.style.color = '#00f0ff';
-        headerSub.innerHTML = `Nạp an toàn 100%, nhanh gọn uy tín. Nhấn <strong>"NẠP NGAY"</strong> để chốt đơn nhé 💗`;
+        headerSub.innerHTML = `Chọn gói nạp bạn muốn mua rồi nhấn <strong>"THANH TOÁN"</strong> bên dưới nhé 💗`;
         searchBox.className = 'vault-search-box wuwa-theme';
         searchInput.placeholder = 'Tìm kiếm gói nạp (Thẻ tháng, Lunite...)...';
       }
 
+      updateWuwaBottomBar();
       applyFiltersAndRender();
     }
 
@@ -1638,11 +1923,66 @@
       emptyEl.style.display = 'none';
       gridEl.style.display = 'grid';
 
+      if (currentCategory === 'wuwa') {
+        gridEl.className = 'vault-grid wuwa-grid-layout';
+        renderWuwaGridItems(list, gridEl);
+      } else {
+        gridEl.className = 'vault-grid';
+        renderShirtsGridItems(list, gridEl);
+      }
+    }
+
+    function renderWuwaGridItems(list, gridEl) {
+      const fragment = document.createDocumentFragment();
+
+      list.forEach(item => {
+        const isSelected = cart.some(cartItem => cartItem.id === item.id);
+        const card = document.createElement('div');
+        card.className = `wuwa-shop-card ${isSelected ? 'selected' : ''}`;
+
+        card.innerHTML = `
+          <div class="wuwa-check-badge">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <div class="wuwa-item-img-wrap">
+            <img class="wuwa-item-img" src="${item.image || 'avatar.jpg'}" alt="${item.title}" loading="lazy" />
+          </div>
+          <div class="wuwa-item-meta">
+            <div class="wuwa-item-title">${item.title}</div>
+            <div class="wuwa-item-price">${formatPrice(item.price)}</div>
+          </div>
+        `;
+
+        card.onclick = () => {
+          toggleWuwaItemSelection(item, card);
+        };
+
+        fragment.appendChild(card);
+      });
+
+      gridEl.appendChild(fragment);
+    }
+
+    function toggleWuwaItemSelection(item, cardEl) {
+      const existingIdx = cart.findIndex(c => c.id === item.id);
+      if (existingIdx > -1) {
+        cart.splice(existingIdx, 1);
+        cardEl.classList.remove('selected');
+        showToast(`Đã bỏ chọn "${item.title}"`);
+      } else {
+        cart.push({ ...item, selected: true });
+        cardEl.classList.add('selected');
+        showToast(`Đã chọn "${item.title}" 💗`);
+      }
+      saveCart();
+    }
+
+    function renderShirtsGridItems(list, gridEl) {
       const fragment = document.createDocumentFragment();
 
       list.forEach(item => {
         const card = document.createElement('div');
-        card.className = `vault-card ${item.type === 'wuwa' ? 'wuwa-card' : ''}`;
+        card.className = 'vault-card';
 
         const priceText = formatPrice(item.price);
         const imgWrap = document.createElement('div');
@@ -1667,13 +2007,6 @@
         priceBadge.textContent = priceText;
         imgWrap.appendChild(priceBadge);
 
-        if (item.type === 'wuwa') {
-          const typeBadge = document.createElement('span');
-          typeBadge.className = 'vault-type-badge';
-          typeBadge.textContent = 'WUWA';
-          imgWrap.appendChild(typeBadge);
-        }
-
         const body = document.createElement('div');
         body.className = 'vault-card-body';
 
@@ -1681,7 +2014,7 @@
         titleRow.className = 'vault-title-row';
 
         const titleEl = document.createElement('span');
-        titleEl.className = `vault-code ${item.type === 'wuwa' ? 'wuwa-title' : ''}`;
+        titleEl.className = 'vault-code';
         titleEl.textContent = item.title;
 
         const copyBtn = document.createElement('button');
@@ -1697,9 +2030,9 @@
         actionsRow.className = 'card-actions-row';
 
         const buyBtn = document.createElement('button');
-        buyBtn.className = `btn-buy-acc ${item.type === 'wuwa' ? 'btn-buy-wuwa' : ''}`;
+        buyBtn.className = 'btn-buy-acc';
         buyBtn.type = 'button';
-        buyBtn.innerHTML = item.type === 'wuwa' ? '<i class="fa-solid fa-bolt"></i> NẠP NGAY' : '<i class="fa-brands fa-tiktok"></i> MUA ÁO';
+        buyBtn.innerHTML = '<i class="fa-brands fa-tiktok"></i> MUA ÁO';
         buyBtn.onclick = () => selectAndOrderSingle(item.title, priceText, item.type);
 
         const addCartBtn = document.createElement('button');
@@ -1797,6 +2130,9 @@
       cart.splice(index, 1);
       saveCart();
       renderCartItems();
+      if (currentCategory === 'wuwa') {
+        applyFiltersAndRender();
+      }
     }
 
     function clearAllCart() {
@@ -1804,6 +2140,9 @@
       cart = [];
       saveCart();
       renderCartItems();
+      if (currentCategory === 'wuwa') {
+        applyFiltersAndRender();
+      }
     }
 
     function toggleSelectAllCart(checked) {
@@ -1891,7 +2230,6 @@ ${codesList}
       showOrderNoticeModal();
     }
 
-    /* CSKH Live */
     function toggleCskhModal(forceState) {
       const modal = document.getElementById('cskhChatModal');
       const isActive = forceState !== undefined ? forceState : !modal.classList.contains('active');
