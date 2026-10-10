@@ -6,211 +6,1422 @@
   <title>Kho áo & Nạp Game của Chía 💗</title>
   <link rel="icon" href="avatar.jpg" type="image/jpeg">
 
-  <link rel="preconnect" href="https://llijmkoztqthovvklamm.supabase.co" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
-  <!-- Supabase CDN (Chỉ dùng riêng cho Chat CSKH 2 chiều) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 55px 12px 105px; background: #000; overflow-x: hidden; color: #ffffff; position: relative; }
-    .bg-video { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; object-fit: cover; object-position: center center; z-index: -2; pointer-events: none; }
-    @media (max-width: 768px) { .bg-video { object-position: 70% center; } }
-    .bg-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.28); z-index: -1; pointer-events: none; }
-    .container { width: 100%; max-width: 540px; display: flex; flex-direction: column; gap: 16px; align-items: center; transition: max-width 0.25s ease; position: relative; z-index: 1; }
-    @media (min-width: 768px) { .container { max-width: 860px; } body { padding: 65px 20px 90px; } }
-    @media (min-width: 1100px) { .container { max-width: 1140px; } }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
 
-    .chibi-sitter-left { position: absolute; top: -55px; left: 6px; width: 75px; height: auto; z-index: 10; pointer-events: none; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7)); animation: chibiBounceLeft 3.5s ease-in-out infinite; user-select: none; }
-    .chibi-sitter-right { position: absolute; top: -58px; right: 0px; width: 65px; height: auto; z-index: 10; pointer-events: none; filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7)); animation: chibiBounceRight 3.5s ease-in-out infinite 0.6s; user-select: none; }
-    @media (min-width: 768px) { .chibi-sitter-left { top: -72px; left: 20px; width: 120px; } .chibi-sitter-right { top: -68px; right: 20px; width: 105px; } }
-    @keyframes chibiBounceLeft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-    @keyframes chibiBounceRight { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 55px 12px 105px;
+      background: #000;
+      overflow-x: hidden;
+      color: #ffffff;
+      position: relative;
+    }
 
-    .card-border-wrapper { position: relative; width: 100%; border-radius: 28px; padding: 2px; display: flex; justify-content: center; align-items: center; background: transparent; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(254, 44, 85, 0.3); }
-    .card-border-wrapper::before { content: ""; position: absolute; inset: 0; border-radius: 28px; padding: 2px; background: conic-gradient(from 0deg, #fe2c55, #ffffff, #00f0ff, #fe2c55); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; animation: spinBorder 5s linear infinite; pointer-events: none; z-index: 2; }
-    @keyframes spinBorder { 100% { filter: hue-rotate(360deg); } }
-    .card { position: relative; width: 100%; background: rgba(15, 15, 25, 0.32); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border-radius: 26px; padding: 22px 14px; z-index: 1; border: 1px solid rgba(255, 255, 255, 0.12); }
-    @media (min-width: 768px) { .card { padding: 28px 24px; } }
+    .bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center center;
+      z-index: -2;
+      pointer-events: none;
+    }
 
-    .main-category-switcher { display: flex; gap: 8px; background: rgba(0, 0, 0, 0.5); padding: 5px; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.15); margin-bottom: 16px; width: 100%; }
-    .btn-cat-switch { flex: 1; padding: 10px 8px; border-radius: 12px; border: none; background: transparent; color: #aaa; font-size: 0.88rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.25s ease; }
-    .btn-cat-switch.active { background: linear-gradient(135deg, #fe2c55, #ff0055); color: #fff; box-shadow: 0 4px 15px rgba(254, 44, 85, 0.5); }
-    .btn-cat-switch.wuwa-active { background: linear-gradient(135deg, #00f0ff, #0099ff); color: #000; box-shadow: 0 4px 15px rgba(0, 240, 255, 0.5); }
+    @media (max-width: 768px) {
+      .bg-video { object-position: 70% center; }
+    }
 
-    .card-header-main { text-align: center; margin-bottom: 16px; padding: 0 20px; }
-    .card-header-main h1 { font-size: 1.15rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 12px rgba(0, 240, 255, 0.6); line-height: 1.35; }
-    @media (min-width: 768px) { .card-header-main h1 { font-size: 1.35rem; } }
+    .bg-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.28);
+      z-index: -1;
+      pointer-events: none;
+    }
 
-    .vault-search-box { width: 100%; position: relative; margin-bottom: 12px; }
-    .vault-search-box input { width: 100%; padding: 11px 40px 11px 40px; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(254, 44, 85, 0.5); border-radius: 12px; color: #fff; font-size: 0.92rem; outline: none; transition: all 0.2s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
-    .vault-search-box.wuwa-theme input { border-color: rgba(0, 240, 255, 0.5); }
-    .vault-search-box input:focus { border-color: #00f0ff; box-shadow: 0 0 10px rgba(0, 240, 255, 0.35); background: rgba(0, 0, 0, 0.6); }
-    .vault-search-box i.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #fe2c55; }
-    .vault-search-box.wuwa-theme i.search-icon { color: #00f0ff; }
-    .search-clear-btn { display: none; position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: rgba(255, 255, 255, 0.2); border: none; border-radius: 50%; width: 20px; height: 20px; color: #fff; font-size: 0.75rem; align-items: center; justify-content: center; cursor: pointer; }
+    .container {
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      align-items: center;
+      transition: max-width 0.25s ease;
+      position: relative;
+      z-index: 1;
+    }
 
-    .filter-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 18px; scrollbar-width: none; }
+    @media (min-width: 768px) {
+      .container { max-width: 860px; }
+      body { padding: 65px 20px 90px; }
+    }
+
+    @media (min-width: 1100px) {
+      .container { max-width: 1140px; }
+    }
+
+    .chibi-sitter-left {
+      position: absolute;
+      top: -55px;
+      left: 6px;
+      width: 75px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+      animation: chibiBounceLeft 3.5s ease-in-out infinite;
+      user-select: none;
+    }
+
+    .chibi-sitter-right {
+      position: absolute;
+      top: -58px;
+      right: 0px;
+      width: 65px;
+      height: auto;
+      z-index: 10;
+      pointer-events: none;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+      animation: chibiBounceRight 3.5s ease-in-out infinite 0.6s;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .chibi-sitter-left { top: -72px; left: 20px; width: 120px; }
+      .chibi-sitter-right { top: -68px; right: 20px; width: 105px; }
+    }
+
+    @keyframes chibiBounceLeft {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes chibiBounceRight {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .card-border-wrapper {
+      position: relative;
+      width: 100%;
+      border-radius: 28px;
+      padding: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), 0 0 20px rgba(254, 44, 85, 0.3);
+    }
+
+    .card-border-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 28px;
+      padding: 2px;
+      background: conic-gradient(from 0deg, #fe2c55, #ffffff, #00f0ff, #fe2c55);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      animation: spinBorder 5s linear infinite;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    @keyframes spinBorder {
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      background: rgba(15, 15, 25, 0.32);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 26px;
+      padding: 22px 14px;
+      z-index: 1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    @media (min-width: 768px) {
+      .card { padding: 28px 24px; }
+    }
+
+    .main-category-switcher {
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 5px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      margin-bottom: 16px;
+      width: 100%;
+    }
+
+    .btn-cat-switch {
+      flex: 1;
+      padding: 10px 8px;
+      border-radius: 12px;
+      border: none;
+      background: transparent;
+      color: #aaa;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .btn-cat-switch.active {
+      background: linear-gradient(135deg, #fe2c55, #ff0055);
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(254, 44, 85, 0.5);
+    }
+
+    .btn-cat-switch.wuwa-active {
+      background: linear-gradient(135deg, #00f0ff, #0099ff);
+      color: #000;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.5);
+    }
+
+    .card-header-main {
+      text-align: center;
+      margin-bottom: 16px;
+      padding: 0 20px;
+    }
+
+    .card-header-main h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #00f0ff;
+      text-shadow: 0 0 12px rgba(0, 240, 255, 0.6);
+      line-height: 1.35;
+    }
+
+    @media (min-width: 768px) {
+      .card-header-main h1 { font-size: 1.35rem; }
+    }
+
+    .vault-search-box {
+      width: 100%;
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .vault-search-box input {
+      width: 100%;
+      padding: 11px 40px 11px 40px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(254, 44, 85, 0.5);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.2s;
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+    }
+
+    .vault-search-box.wuwa-theme input {
+      border-color: rgba(0, 240, 255, 0.5);
+    }
+
+    .vault-search-box input:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.35);
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .vault-search-box i.search-icon {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fe2c55;
+    }
+
+    .vault-search-box.wuwa-theme i.search-icon {
+      color: #00f0ff;
+    }
+
+    .search-clear-btn {
+      display: none;
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      color: #fff;
+      font-size: 0.75rem;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+      scrollbar-width: none;
+    }
     .filter-chips::-webkit-scrollbar { display: none; }
-    @media (min-width: 768px) { .filter-chips { justify-content: center; } }
-    .chip-btn { flex: 0 0 auto; padding: 6px 14px; border-radius: 20px; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: #eee; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
-    .chip-btn.active { background: #fe2c55; border-color: #fe2c55; color: #fff; box-shadow: 0 0 10px rgba(254, 44, 85, 0.6); }
-    .chip-btn.active-wuwa { background: #00f0ff; border-color: #00f0ff; color: #000; box-shadow: 0 0 10px rgba(0, 240, 255, 0.6); }
 
-    .vault-grid, .skeleton-grid { display: grid; grid-template-columns: 1fr; gap: 14px; }
-    @media (min-width: 480px) { .vault-grid, .skeleton-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 768px) { .vault-grid, .skeleton-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; } }
-    @media (min-width: 1024px) { .vault-grid, .skeleton-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; } }
+    @media (min-width: 768px) {
+      .filter-chips { justify-content: center; }
+    }
 
-    .vault-card { background: rgba(15, 15, 25, 0.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); border: 1.5px solid rgba(254, 44, 85, 0.35); border-radius: 16px; overflow: hidden; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45); transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; display: flex; flex-direction: column; }
-    .vault-card.wuwa-card { border-color: rgba(0, 240, 255, 0.4); }
-    .vault-card:hover { border-color: #00f0ff; transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0, 240, 255, 0.3); background: rgba(20, 20, 35, 0.45); }
+    .chip-btn {
+      flex: 0 0 auto;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #eee;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .chip-btn.active {
+      background: #fe2c55;
+      border-color: #fe2c55;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(254, 44, 85, 0.6);
+    }
+
+    .chip-btn.active-wuwa {
+      background: #00f0ff;
+      border-color: #00f0ff;
+      color: #000;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+    }
+
+    .vault-grid, .skeleton-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    @media (min-width: 480px) {
+      .vault-grid, .skeleton-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (min-width: 768px) {
+      .vault-grid, .skeleton-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    }
+    @media (min-width: 1024px) {
+      .vault-grid, .skeleton-grid { grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    }
+
+    .vault-card {
+      background: rgba(15, 15, 25, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(254, 44, 85, 0.35);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.45);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .vault-card.wuwa-card {
+      border-color: rgba(0, 240, 255, 0.4);
+    }
+
+    .vault-card:hover {
+      border-color: #00f0ff;
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.3);
+      background: rgba(20, 20, 35, 0.45);
+    }
 
     /* Giao diện Thẻ WuWa theo chuẩn hình mẫu */
-    .wuwa-grid-layout { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 12px !important; }
-    @media (min-width: 768px) { .wuwa-grid-layout { grid-template-columns: repeat(3, 1fr) !important; gap: 16px !important; } }
-    @media (min-width: 1024px) { .wuwa-grid-layout { grid-template-columns: repeat(4, 1fr) !important; } }
+    .wuwa-grid-layout {
+      display: grid !important;
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px !important;
+    }
 
-    .wuwa-shop-card { position: relative; background: #1c1d23; border: 1.5px solid #282932; border-radius: 16px; padding: 14px 12px 14px; display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; cursor: pointer; user-select: none; transition: all 0.22s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4); }
-    .wuwa-shop-card:hover { background: #23252d; border-color: #3b82f6; }
-    .wuwa-shop-card.selected { border-color: #2563eb; background: rgba(37, 99, 235, 0.08); box-shadow: 0 0 0 1px #2563eb, 0 6px 20px rgba(37, 99, 235, 0.25); }
-    .wuwa-check-badge { position: absolute; top: 10px; left: 10px; width: 22px; height: 22px; border-radius: 50%; background: #2563eb; color: #fff; display: none; align-items: center; justify-content: center; font-size: 0.72rem; box-shadow: 0 2px 8px rgba(37, 99, 235, 0.6); z-index: 5; }
-    .wuwa-shop-card.selected .wuwa-check-badge { display: flex; }
-    .wuwa-item-img-wrap { width: 100%; height: 125px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; overflow: hidden; }
-    .wuwa-item-img { max-width: 90%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6)); transition: transform 0.25s ease; }
-    .wuwa-shop-card:hover .wuwa-item-img { transform: scale(1.06); }
-    .wuwa-item-meta { display: flex; flex-direction: column; gap: 5px; text-align: left; }
-    .wuwa-item-title { font-size: 0.88rem; font-weight: 600; color: #e2e8f0; line-height: 1.3; white-space: normal; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-    .wuwa-item-price { font-size: 0.95rem; font-weight: 700; color: #2563eb; letter-spacing: 0.2px; }
+    @media (min-width: 768px) {
+      .wuwa-grid-layout {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 16px !important;
+      }
+    }
+    @media (min-width: 1024px) {
+      .wuwa-grid-layout {
+        grid-template-columns: repeat(4, 1fr) !important;
+      }
+    }
+
+    .wuwa-shop-card {
+      position: relative;
+      background: #1c1d23;
+      border: 1.5px solid #282932;
+      border-radius: 16px;
+      padding: 14px 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 220px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.22s ease;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    }
+
+    .wuwa-shop-card:hover {
+      background: #23252d;
+      border-color: #3b82f6;
+    }
+
+    .wuwa-shop-card.selected {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.08);
+      box-shadow: 0 0 0 1px #2563eb, 0 6px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .wuwa-check-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: #fff;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.72rem;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.6);
+      z-index: 5;
+    }
+
+    .wuwa-shop-card.selected .wuwa-check-badge {
+      display: flex;
+    }
+
+    .wuwa-item-img-wrap {
+      width: 100%;
+      height: 125px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      overflow: hidden;
+    }
+
+    .wuwa-item-img {
+      max-width: 90%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.6));
+      transition: transform 0.25s ease;
+    }
+
+    .wuwa-shop-card:hover .wuwa-item-img {
+      transform: scale(1.06);
+    }
+
+    .wuwa-item-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      text-align: left;
+    }
+
+    .wuwa-item-title {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #e2e8f0;
+      line-height: 1.3;
+      white-space: normal;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .wuwa-item-price {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #2563eb;
+      letter-spacing: 0.2px;
+    }
 
     /* Thanh Bar Thanh Toán Nổi bên dưới cho WuWa */
-    .wuwa-bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0f1015; border-top: 1px solid #232530; padding: 12px 18px; display: flex; align-items: center; justify-content: space-between; z-index: 1000; box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7); transform: translateY(105%); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2); pointer-events: none; }
-    .wuwa-bottom-bar.active { transform: translateY(0); pointer-events: auto; }
-    .wuwa-bottom-left { display: flex; align-items: center; gap: 12px; cursor: pointer; }
-    .wuwa-cart-icon-wrap { position: relative; font-size: 1.45rem; color: #94a3b8; }
-    .wuwa-cart-badge { position: absolute; top: -6px; right: -8px; background: #2563eb; color: #fff; font-size: 0.68rem; font-weight: 800; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .wuwa-cart-info { display: flex; flex-direction: column; line-height: 1.25; }
-    .wuwa-cart-count-text { font-size: 0.78rem; color: #94a3b8; display: flex; align-items: center; gap: 4px; }
-    .wuwa-cart-total-text { font-size: 1.05rem; font-weight: 800; color: #2563eb; }
-    .btn-wuwa-checkout { background: #2563eb; color: #fff; border: none; border-radius: 12px; padding: 12px 24px; font-size: 0.92rem; font-weight: 800; display: flex; align-items: center; gap: 8px; cursor: pointer; box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45); transition: all 0.2s; }
-    .btn-wuwa-checkout:active { transform: scale(0.96); }
+    .wuwa-bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #0f1015;
+      border-top: 1px solid #232530;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 1000;
+      box-shadow: 0 -8px 25px rgba(0, 0, 0, 0.7);
+      transform: translateY(105%);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+      pointer-events: none;
+    }
+
+    .wuwa-bottom-bar.active {
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .wuwa-bottom-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .wuwa-cart-icon-wrap {
+      position: relative;
+      font-size: 1.45rem;
+      color: #94a3b8;
+    }
+
+    .wuwa-cart-badge {
+      position: absolute;
+      top: -6px;
+      right: -8px;
+      background: #2563eb;
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: 800;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wuwa-cart-info {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+
+    .wuwa-cart-count-text {
+      font-size: 0.78rem;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .wuwa-cart-total-text {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #2563eb;
+    }
+
+    .btn-wuwa-checkout {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 99, 235, 0.45);
+      transition: all 0.2s;
+    }
+
+    .btn-wuwa-checkout:active {
+      transform: scale(0.96);
+    }
 
     /* Khung ảnh Kho Áo */
-    .vault-img-wrap { position: relative; width: 100%; aspect-ratio: 4 / 4.8; background: rgba(0, 0, 0, 0.3); overflow: hidden; cursor: pointer; }
-    .vault-img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.35s ease; }
-    .vault-card.wuwa-card .vault-img-wrap { aspect-ratio: 16 / 9; height: auto; background: rgba(0, 0, 0, 0.6); }
-    .vault-card.wuwa-card .vault-img { object-fit: contain; padding: 0; }
-    .vault-card:hover .vault-img { transform: scale(1.05); }
-    .vault-price-badge { position: absolute; top: 8px; right: 8px; background: rgba(0, 0, 0, 0.85); border: 1px solid #fcee0a; color: #fcee0a; font-size: 0.82rem; font-weight: 800; padding: 3px 8px; border-radius: 6px; box-shadow: 0 0 10px rgba(252, 238, 10, 0.3); }
-    .vault-card-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; border-top: 1px solid rgba(255, 255, 255, 0.08); background: rgba(0, 0, 0, 0.35); flex: 1; justify-content: space-between; }
-    .vault-title-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-    .vault-code { font-size: 1rem; font-weight: 800; color: #fe2c55; letter-spacing: 0.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8); }
-    .vault-code.wuwa-title { color: #00f0ff; }
-    .btn-icon-copy { background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.25); color: #fff; width: 32px; height: 32px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.85rem; cursor: pointer; flex-shrink: 0; transition: all 0.2s; }
-    .btn-icon-copy:active { transform: scale(0.9); background: #fe2c55; color: #fff; }
-    .card-actions-row { display: flex; gap: 8px; }
-    .btn-buy-acc { flex: 1; padding: 9px 8px; background: linear-gradient(135deg, #fe2c55, #ff0055); border: none; border-radius: 10px; color: #fff; font-size: 0.82rem; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 5px; box-shadow: 0 4px 14px rgba(254, 44, 85, 0.4); transition: all 0.2s; }
-    .btn-buy-acc.btn-buy-wuwa { background: linear-gradient(135deg, #00f0ff, #0099ff); color: #000; box-shadow: 0 4px 14px rgba(0, 240, 255, 0.4); }
+    .vault-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 4.8;
+      background: rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .vault-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.35s ease;
+    }
+
+    /* Khung ảnh Nạp WuWa */
+    .vault-card.wuwa-card .vault-img-wrap {
+      aspect-ratio: 16 / 9;
+      height: auto;
+      background: rgba(0, 0, 0, 0.6);
+    }
+
+    .vault-card.wuwa-card .vault-img {
+      object-fit: contain;
+      padding: 0;
+    }
+
+    .vault-card:hover .vault-img {
+      transform: scale(1.05);
+    }
+
+    .vault-price-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid #fcee0a;
+      color: #fcee0a;
+      font-size: 0.82rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 0 10px rgba(252, 238, 10, 0.3);
+    }
+
+    .vault-type-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0, 240, 255, 0.85);
+      color: #000;
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 6px;
+      border-radius: 4px;
+    }
+
+    .vault-card-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(0, 0, 0, 0.35);
+      flex: 1;
+      justify-content: space-between;
+    }
+
+    .vault-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .vault-code {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #fe2c55;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8);
+    }
+
+    .vault-code.wuwa-title {
+      color: #00f0ff;
+    }
+
+    .btn-icon-copy {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .btn-icon-copy:active {
+      transform: scale(0.9);
+      background: #fe2c55;
+      color: #fff;
+    }
+
+    .card-actions-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-buy-acc {
+      flex: 1;
+      padding: 9px 8px;
+      background: linear-gradient(135deg, #fe2c55, #ff0055);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-shadow: 0 4px 14px rgba(254, 44, 85, 0.4);
+      transition: all 0.2s;
+    }
+
+    .btn-buy-acc.btn-buy-wuwa {
+      background: linear-gradient(135deg, #00f0ff, #0099ff);
+      color: #000;
+      box-shadow: 0 4px 14px rgba(0, 240, 255, 0.4);
+    }
+
     .btn-buy-acc:active { transform: scale(0.97); }
-    .btn-add-cart { background: rgba(0, 240, 255, 0.16); border: 1px solid rgba(0, 240, 255, 0.6); color: #00f0ff; border-radius: 10px; padding: 0 11px; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s; }
+
+    .btn-add-cart {
+      background: rgba(0, 240, 255, 0.16);
+      border: 1px solid rgba(0, 240, 255, 0.6);
+      color: #00f0ff;
+      border-radius: 10px;
+      padding: 0 11px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
     .btn-add-cart:active { transform: scale(0.92); }
 
     /* Skeleton Loading UI */
-    .skeleton-card { background: rgba(20, 20, 30, 0.3); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; overflow: hidden; backdrop-filter: blur(8px); }
-    .skeleton-img { width: 100%; aspect-ratio: 4 / 4.8; background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-    .skeleton-body { padding: 12px; display: flex; flex-direction: column; gap: 10px; }
-    .skeleton-line { height: 16px; border-radius: 4px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-    .skeleton-btn { height: 34px; border-radius: 8px; background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
-    @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+    .skeleton-card {
+      background: rgba(20, 20, 30, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      backdrop-filter: blur(8px);
+    }
+
+    .skeleton-img {
+      width: 100%;
+      aspect-ratio: 4 / 4.8;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-body {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .skeleton-line {
+      height: 16px;
+      border-radius: 4px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    .skeleton-btn {
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.05) 25%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
 
     /* Giỏ hàng Floating */
-    .floating-cart-btn { position: fixed; bottom: 36px; right: 18px; background: linear-gradient(135deg, #00f0ff, #0099ff); color: #000; height: 52px; min-width: 52px; border-radius: 26px; border: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 25px rgba(0, 240, 255, 0.45); cursor: pointer; z-index: 1000; padding: 0 15px; transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .floating-cart-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.6); }
+    .floating-cart-btn {
+      position: fixed;
+      bottom: 36px;
+      right: 18px;
+      background: linear-gradient(135deg, #00f0ff, #0099ff);
+      color: #000;
+      height: 52px;
+      min-width: 52px;
+      border-radius: 26px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.45);
+      cursor: pointer;
+      z-index: 1000;
+      padding: 0 15px;
+      transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .floating-cart-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(0, 240, 255, 0.6);
+    }
     .floating-cart-btn:active { transform: scale(0.95); }
-    .cart-icon-main { font-size: 1.25rem; display: flex; align-items: center; justify-content: center; }
-    .cart-label-expanded { display: inline-block; max-width: 0; opacity: 0; overflow: hidden; white-space: nowrap; font-size: 0.82rem; font-weight: 800; color: #000; margin-left: 0; transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1); }
-    .floating-cart-btn.show-pill .cart-label-expanded { max-width: 220px; opacity: 1; margin-left: 8px; }
-    .cart-badge { position: absolute; top: -3px; right: -3px; background: #fe2c55; color: #fff; font-size: 0.72rem; font-weight: 800; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid #000; transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    .cart-badge.cart-pop { animation: badgePop 0.45s ease-out; }
-    @keyframes badgePop { 0% { transform: scale(1); } 50% { transform: scale(1.6) rotate(-10deg); } 75% { transform: scale(0.9) rotate(5deg); } 100% { transform: scale(1); } }
-    .flying-cart-clone { position: fixed; z-index: 10000; border-radius: 12px; object-fit: cover; pointer-events: none; box-shadow: 0 10px 25px rgba(0, 240, 255, 0.6); border: 2px solid #00f0ff; transition: all 0.75s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+    .cart-icon-main {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .cart-label-expanded {
+      display: inline-block;
+      max-width: 0;
+      opacity: 0;
+      overflow: hidden;
+      white-space: nowrap;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #000;
+      margin-left: 0;
+      transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .floating-cart-btn.show-pill .cart-label-expanded {
+      max-width: 220px;
+      opacity: 1;
+      margin-left: 8px;
+    }
+
+    .cart-badge {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      background: #fe2c55;
+      color: #fff;
+      font-size: 0.72rem;
+      font-weight: 800;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #000;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .cart-badge.cart-pop {
+      animation: badgePop 0.45s ease-out;
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.6) rotate(-10deg); }
+      75% { transform: scale(0.9) rotate(5deg); }
+      100% { transform: scale(1); }
+    }
+
+    .flying-cart-clone {
+      position: fixed;
+      z-index: 10000;
+      border-radius: 12px;
+      object-fit: cover;
+      pointer-events: none;
+      box-shadow: 0 10px 25px rgba(0, 240, 255, 0.6);
+      border: 2px solid #00f0ff;
+      transition: all 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
 
     /* Drawer Giỏ hàng */
-    .cart-drawer-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; display: flex; justify-content: center; align-items: flex-end; }
-    .cart-drawer-overlay.active { opacity: 1; visibility: visible; }
-    .cart-drawer { width: 100%; max-width: 500px; max-height: 82vh; background: rgba(18, 18, 28, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(254, 44, 85, 0.4); border-bottom: none; border-radius: 24px 24px 0 0; padding: 16px 18px 26px; display: flex; flex-direction: column; transform: translateY(100%); transition: transform 0.32s cubic-bezier(0.1, 0.9, 0.2, 1); }
-    .cart-drawer-overlay.active .cart-drawer { transform: translateY(0); }
-    @media (min-width: 768px) { .cart-drawer-overlay { align-items: center; } .cart-drawer { border-bottom: 1px solid rgba(254, 44, 85, 0.4); border-radius: 24px; transform: scale(0.9); } .cart-drawer-overlay.active .cart-drawer { transform: scale(1); } }
-    .cart-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
-    .cart-header h3 { font-size: 1.1rem; color: #00f0ff; display: flex; align-items: center; gap: 8px; }
-    .btn-close-cart { background: none; border: none; color: #888; font-size: 1.4rem; cursor: pointer; }
-    .cart-select-bar { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 0.85rem; color: #ccc; }
-    .cart-select-bar label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
-    .cart-items-list { flex: 1; overflow-y: auto; max-height: 44vh; display: flex; flex-direction: column; gap: 10px; padding: 6px 0; }
-    .cart-item { display: flex; align-items: center; gap: 10px; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 8px 10px; }
-    .cart-item-img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #000; }
-    .cart-item-info { flex: 1; min-width: 0; }
-    .cart-item-title { font-size: 0.9rem; font-weight: 700; color: #fe2c55; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .cart-item-price { font-size: 0.85rem; font-weight: 700; color: #fcee0a; margin-top: 2px; }
-    .btn-remove-item { background: none; border: none; color: #777; padding: 6px; font-size: 1rem; cursor: pointer; transition: color 0.2s; }
+    .cart-drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .cart-drawer-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .cart-drawer {
+      width: 100%;
+      max-width: 500px;
+      max-height: 82vh;
+      background: rgba(18, 18, 28, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(254, 44, 85, 0.4);
+      border-bottom: none;
+      border-radius: 24px 24px 0 0;
+      padding: 16px 18px 26px;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(100%);
+      transition: transform 0.32s cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+
+    .cart-drawer-overlay.active .cart-drawer {
+      transform: translateY(0);
+    }
+
+    @media (min-width: 768px) {
+      .cart-drawer-overlay { align-items: center; }
+      .cart-drawer {
+        border-bottom: 1px solid rgba(254, 44, 85, 0.4);
+        border-radius: 24px;
+        transform: scale(0.9);
+      }
+      .cart-drawer-overlay.active .cart-drawer { transform: scale(1); }
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .cart-header h3 {
+      font-size: 1.1rem;
+      color: #00f0ff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-close-cart {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .cart-select-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      font-size: 0.85rem;
+      color: #ccc;
+    }
+
+    .cart-select-bar label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .cart-items-list {
+      flex: 1;
+      overflow-y: auto;
+      max-height: 44vh;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding: 6px 0;
+    }
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 8px 10px;
+    }
+
+    .cart-item-img {
+      width: 48px;
+      height: 48px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .cart-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cart-item-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #fe2c55;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .cart-item-price {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #fcee0a;
+      margin-top: 2px;
+    }
+
+    .btn-remove-item {
+      background: none;
+      border: none;
+      color: #777;
+      padding: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
     .btn-remove-item:hover { color: #fe2c55; }
-    .cart-footer { padding-top: 14px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; flex-direction: column; gap: 12px; }
-    .cart-summary { display: flex; justify-content: space-between; align-items: center; }
-    .cart-total-price { font-size: 1.15rem; font-weight: 800; color: #fcee0a; text-shadow: 0 0 10px rgba(252, 238, 10, 0.4); }
-    .btn-checkout { width: 100%; padding: 12px; background: linear-gradient(135deg, #fe2c55, #ff0055); border: none; border-radius: 12px; color: #fff; font-size: 0.92rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(254, 44, 85, 0.5); }
+
+    .cart-footer {
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-total-price {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fcee0a;
+      text-shadow: 0 0 10px rgba(252, 238, 10, 0.4);
+    }
+
+    .btn-checkout {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #fe2c55, #ff0055);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.92rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(254, 44, 85, 0.5);
+    }
+
     .btn-checkout:active { transform: scale(0.98); }
 
     /* Modal phóng to ảnh */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 9999; justify-content: center; align-items: center; padding: 16px; }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
     .modal-overlay.active { display: flex; }
-    .image-modal-content { max-width: 95vw; max-height: 85vh; object-fit: contain; border-radius: 10px; border: 1px solid rgba(254, 44, 85, 0.4); }
-    .image-modal-close { position: absolute; top: 16px; right: 20px; color: #fff; font-size: 32px; cursor: pointer; }
+
+    .image-modal-content {
+      max-width: 95vw;
+      max-height: 85vh;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid rgba(254, 44, 85, 0.4);
+    }
+
+    .image-modal-close {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      color: #fff;
+      font-size: 32px;
+      cursor: pointer;
+    }
 
     /* Modal Thông Báo Đặt Hàng */
-    .order-modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 11000; display: flex; justify-content: center; align-items: center; padding: 18px; opacity: 0; visibility: hidden; transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
-    .order-modal-overlay.active { opacity: 1; visibility: visible; }
-    .order-modal-card { width: 100%; max-width: 440px; background: rgba(18, 18, 26, 0.92); border: 1.5px solid #fe2c55; border-radius: 22px; padding: 24px 20px 22px; text-align: center; box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(254, 44, 85, 0.4); transform: scale(0.9); transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; }
-    .order-modal-overlay.active .order-modal-card { transform: scale(1); }
-    .order-modal-icon { font-size: 2.6rem; color: #00f0ff; margin-bottom: 12px; animation: pulseIcon 1.5s infinite; }
-    @keyframes pulseIcon { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
-    .order-modal-title { font-size: 1.18rem; font-weight: 800; color: #00f0ff; text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); margin-bottom: 10px; }
-    .order-modal-box { background: rgba(254, 44, 85, 0.12); border: 1px dashed rgba(254, 44, 85, 0.5); border-radius: 12px; padding: 12px; margin: 12px 0 16px; font-size: 0.88rem; line-height: 1.45; color: #eee; }
-    .order-modal-highlight { color: #fcee0a; font-weight: 800; }
-    .order-modal-actions { display: flex; flex-direction: column; gap: 10px; }
-    .btn-goto-tiktok { width: 100%; padding: 12px; background: linear-gradient(135deg, #fe2c55, #ff0055); border: none; border-radius: 12px; color: #fff; font-size: 0.94rem; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(254, 44, 85, 0.45); transition: transform 0.15s ease; }
+    .order-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 11000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 18px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .order-modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .order-modal-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(18, 18, 26, 0.92);
+      border: 1.5px solid #fe2c55;
+      border-radius: 22px;
+      padding: 24px 20px 22px;
+      text-align: center;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 25px rgba(254, 44, 85, 0.4);
+      transform: scale(0.9);
+      transition: transform 0.28s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .order-modal-overlay.active .order-modal-card {
+      transform: scale(1);
+    }
+
+    .order-modal-icon {
+      font-size: 2.6rem;
+      color: #00f0ff;
+      margin-bottom: 12px;
+      animation: pulseIcon 1.5s infinite;
+    }
+
+    @keyframes pulseIcon {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    .order-modal-title {
+      font-size: 1.18rem;
+      font-weight: 800;
+      color: #00f0ff;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+      margin-bottom: 10px;
+    }
+
+    .order-modal-box {
+      background: rgba(254, 44, 85, 0.12);
+      border: 1px dashed rgba(254, 44, 85, 0.5);
+      border-radius: 12px;
+      padding: 12px;
+      margin: 12px 0 16px;
+      font-size: 0.88rem;
+      line-height: 1.45;
+      color: #eee;
+    }
+
+    .order-modal-highlight {
+      color: #fcee0a;
+      font-weight: 800;
+    }
+
+    .order-modal-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .btn-goto-tiktok {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #fe2c55, #ff0055);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-size: 0.94rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 6px 20px rgba(254, 44, 85, 0.45);
+      transition: transform 0.15s ease;
+    }
+
     .btn-goto-tiktok:active { transform: scale(0.98); }
-    .btn-cancel-modal { background: none; border: none; color: #888; font-size: 0.82rem; cursor: pointer; padding: 4px; transition: color 0.2s; }
+
+    .btn-cancel-modal {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 0.82rem;
+      cursor: pointer;
+      padding: 4px;
+      transition: color 0.2s;
+    }
+
     .btn-cancel-modal:hover { color: #ddd; }
 
     /* CSKH Live */
-    .floating-cskh-btn { position: fixed; bottom: 36px; left: 18px; background: linear-gradient(135deg, #2563eb, #3b82f6); color: #fff; height: 44px; padding: 0 16px; border-radius: 22px; border: none; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.88rem; font-weight: 700; box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5); cursor: pointer; z-index: 1001; transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-    body.wuwa-mode .floating-cskh-btn { bottom: 74px; left: auto; right: 18px; }
+    .floating-cskh-btn {
+      position: fixed;
+      bottom: 36px;
+      left: 18px;
+      background: linear-gradient(135deg, #2563eb, #3b82f6);
+      color: #fff;
+      height: 44px;
+      padding: 0 16px;
+      border-radius: 22px;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+      cursor: pointer;
+      z-index: 1001;
+      transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    body.wuwa-mode .floating-cskh-btn {
+      bottom: 74px;
+      left: auto;
+      right: 18px;
+    }
+
     .floating-cskh-btn:hover { transform: scale(1.05); }
     .floating-cskh-btn:active { transform: scale(0.94); }
-    body.wuwa-mode .floating-cskh-btn { bottom: 24px; left: auto; right: 18px; transition: bottom 0.28s ease, transform 0.25s ease; }
-    body.wuwa-mode.has-cart .floating-cskh-btn { bottom: 76px; }
 
-    .cskh-chat-modal { position: fixed; bottom: 96px; left: 18px; width: calc(100vw - 36px); max-width: 360px; height: 480px; max-height: 72vh; background: rgba(16, 16, 26, 0.92); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border: 1px solid rgba(88, 101, 242, 0.5); border-radius: 20px; z-index: 2000; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(88, 101, 242, 0.3); opacity: 0; visibility: hidden; transform: translateY(20px) scale(0.95); transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1); }
-    .cskh-chat-modal.active { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
-    .cskh-header { background: rgba(88, 101, 242, 0.2); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
-    .cskh-header-title { display: flex; align-items: center; gap: 8px; font-size: 0.92rem; font-weight: 700; color: #00f0ff; }
-    .cskh-online-dot { width: 8px; height: 8px; border-radius: 50%; background: #00ff88; box-shadow: 0 0 8px #00ff88; }
-    .btn-close-cskh { background: none; border: none; color: #888; font-size: 1.2rem; cursor: pointer; }
-    .cskh-body { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-    .chat-bubble { max-width: 82%; padding: 8px 12px; border-radius: 14px; font-size: 0.85rem; line-height: 1.4; word-break: break-word; }
-    .chat-bubble.admin { align-self: flex-start; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #fff; border-bottom-left-radius: 2px; }
-    .chat-bubble.user { align-self: flex-end; background: linear-gradient(135deg, #5865F2, #7289da); color: #fff; border-bottom-right-radius: 2px; }
-    .chat-bubble-time { font-size: 0.65rem; color: rgba(255, 255, 255, 0.5); margin-top: 3px; text-align: right; }
-    .cskh-footer { padding: 10px 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 8px; background: rgba(0, 0, 0, 0.4); }
-    .cskh-footer input { flex: 1; background: rgba(255, 255, 255, 0.06); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 20px; padding: 8px 14px; color: #fff; font-size: 0.86rem; outline: none; }
+    body.wuwa-mode .floating-cskh-btn {
+      bottom: 24px;
+      left: auto;
+      right: 18px;
+      transition: bottom 0.28s ease, transform 0.25s ease;
+    }
+
+    body.wuwa-mode.has-cart .floating-cskh-btn {
+      bottom: 76px;
+    }
+
+    .cskh-chat-modal {
+      position: fixed;
+      bottom: 96px;
+      left: 18px;
+      width: calc(100vw - 36px);
+      max-width: 360px;
+      height: 480px;
+      max-height: 72vh;
+      background: rgba(16, 16, 26, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(88, 101, 242, 0.5);
+      border-radius: 20px;
+      z-index: 2000;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9), 0 0 20px rgba(88, 101, 242, 0.3);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(20px) scale(0.95);
+      transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .cskh-chat-modal.active {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0) scale(1);
+    }
+
+    .cskh-header {
+      background: rgba(88, 101, 242, 0.2);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cskh-header-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #00f0ff;
+    }
+
+    .cskh-online-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #00ff88;
+      box-shadow: 0 0 8px #00ff88;
+    }
+
+    .btn-close-cskh {
+      background: none;
+      border: none;
+      color: #888;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .cskh-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chat-bubble {
+      max-width: 82%;
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .chat-bubble.admin {
+      align-self: flex-start;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+      border-bottom-left-radius: 2px;
+    }
+
+    .chat-bubble.user {
+      align-self: flex-end;
+      background: linear-gradient(135deg, #5865F2, #7289da);
+      color: #fff;
+      border-bottom-right-radius: 2px;
+    }
+
+    .chat-bubble-time {
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 3px;
+      text-align: right;
+    }
+
+    .cskh-footer {
+      padding: 10px 12px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      display: flex;
+      gap: 8px;
+      background: rgba(0, 0, 0, 0.4);
+    }
+
+    .cskh-footer input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      padding: 8px 14px;
+      color: #fff;
+      font-size: 0.86rem;
+      outline: none;
+    }
+
     .cskh-footer input:focus { border-color: #5865F2; }
-    .btn-send-cskh { background: #5865F2; border: none; border-radius: 50%; width: 36px; height: 36px; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; transition: transform 0.15s; }
+
+    .btn-send-cskh {
+      background: #5865F2;
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      transition: transform 0.15s;
+    }
+
     .btn-send-cskh:active { transform: scale(0.9); }
 
-    .toast-msg { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(100px); background: rgba(18, 18, 24, 0.95); border: 1px solid #00f0ff; color: #fff; padding: 9px 18px; border-radius: 24px; font-size: 0.85rem; box-shadow: 0 8px 25px rgba(0, 240, 255, 0.35); z-index: 12000; opacity: 0; pointer-events: none; transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease; white-space: nowrap; }
-    .toast-msg.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: rgba(18, 18, 24, 0.95);
+      border: 1px solid #00f0ff;
+      color: #fff;
+      padding: 9px 18px;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      box-shadow: 0 8px 25px rgba(0, 240, 255, 0.35);
+      z-index: 12000;
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .toast-msg.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
@@ -301,7 +1512,7 @@
     <span>CSKH</span>
   </button>
 
-  <!-- Khung Chat CSKH Live (Lưu trên Máy + Discord Webhook) -->
+  <!-- Khung Chat CSKH (Local + Discord) -->
   <div id="cskhChatModal" class="cskh-chat-modal">
     <div class="cskh-header">
       <div class="cskh-header-title">
@@ -312,7 +1523,9 @@
     </div>
 
     <div id="cskhChatBody" class="cskh-body">
-      <!-- Tin nhắn sẽ được JavaScript nhét vào đây -->
+      <div class="chat-bubble admin">
+        chào bạn💗cảm ơn bạn đã ủng hộ shop. Nếu có vấn đề gì hãy thoải mái nhắn mình ở đây nhé 💗
+      </div>
     </div>
 
     <form class="cskh-footer" onsubmit="handleSendCskhMessage(event)">
@@ -421,7 +1634,7 @@
     // Link Google Apps Script cho danh sách Sản Phẩm (Kho Áo & Nạp Wuwa)
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbz8jGm4J3SjzQmucG0Q1ovDDNR2lk4jfCjhVVBspgP23XmjP-Kz0nlQyP0Q4HtHRy0/exec';
 
-    // Cấu hình CSKH (Chỉ dùng Discord Webhook)
+    // Link Discord Webhook để nhận tin nhắn Chat từ khách hàng
     const TIKTOK_USERNAME = 'phalnnn';
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1556846947611054181/5r1jFTCmgmv-gFv3_TJYnZVNuBHor2Pf22HbZjBpZclmyKEQp1dkpYhKKVlUAJ4vMEH7';
 
@@ -438,7 +1651,7 @@
     let redirectTimer = null;
     let countdownInterval = null;
     
-    // Khởi tạo Chat Session ID
+    // Chat CSKH Session
     let chatSessionId = localStorage.getItem('chia_chat_session_id');
     if (!chatSessionId) {
       chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
@@ -567,9 +1780,10 @@
     // ===============================================
     async function fetchAllData() {
       const skeletonEl = document.getElementById('vaultSkeleton');
-      loadSavedCart();
+      loadSavedCart(); // Khởi tạo giỏ hàng trước
       
       try {
+        // Tải đồng thời cả 2 sheet từ Google Apps Script
         await Promise.all([fetchVaultShirts(), fetchWuwaPackages()]);
         if (skeletonEl) skeletonEl.style.display = 'none';
         applyFiltersAndRender();
@@ -1008,7 +2222,7 @@ ${codesList}
     }
 
     // ===============================================
-    // CSKH BẰNG DISCORD WEBHOOK + LOCAL HISTORY
+    // CHAT CSKH (LOCAL STORAGE + DISCORD WEBHOOK)
     // ===============================================
     function toggleCskhModal(forceState) {
       const modal = document.getElementById('cskhChatModal');
@@ -1058,7 +2272,7 @@ ${codesList}
       const now = new Date().toISOString();
       appendMessageUI('user', text, now);
 
-      // Lưu tin nhắn vào bộ nhớ đệm trình duyệt
+      // Lưu vào LocalStorage
       try {
         const history = JSON.parse(localStorage.getItem('chia_chat_history_' + chatSessionId) || '[]');
         history.push({ sender: 'user', text: text, time: now });
@@ -1171,6 +2385,7 @@ ${codesList}
     // KHỞI ĐỘNG HỆ THỐNG
     // ===============================================
     window.addEventListener('DOMContentLoaded', () => {
+      // 1. Tải dữ liệu sản phẩm từ Google Sheets
       fetchAllData();
     });
   </script>
