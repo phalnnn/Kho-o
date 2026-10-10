@@ -6,8 +6,12 @@
   <title>Kho áo & Nạp Game của Chía 💗</title>
   <link rel="icon" href="avatar.jpg" type="image/jpeg">
 
+  <link rel="preconnect" href="https://llijmkoztqthovvklamm.supabase.co" crossorigin>
   <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 
   <style>
     * {
@@ -1512,7 +1516,7 @@
     <span>CSKH</span>
   </button>
 
-  <!-- Khung Chat CSKH (Local + Discord) -->
+  <!-- Khung Chat CSKH Live -->
   <div id="cskhChatModal" class="cskh-chat-modal">
     <div class="cskh-header">
       <div class="cskh-header-title">
@@ -1628,39 +1632,29 @@
   <div id="toast" class="toast-msg"></div>
 
   <script>
-    // ===============================================
-    // CẤU HÌNH API
-    // ===============================================
-    // Link Google Apps Script cho danh sách Sản Phẩm (Kho Áo & Nạp Wuwa)
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbz8jGm4J3SjzQmucG0Q1ovDDNR2lk4jfCjhVVBspgP23XmjP-Kz0nlQyP0Q4HtHRy0/exec';
-
-    // Link Discord Webhook để nhận tin nhắn Chat từ khách hàng
+    const SUPABASE_URL = 'https://llijmkoztqthovvklamm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxsaWpta296dHF0aG92dmtsYW1tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTA4NDQ1NzksImV4cCI6MjEwNjQyMDU3OX0.6ZyBSLuXhQNC-nm1nCBTEZMs5Y3FDE83xD8lvL0HRUk';
     const TIKTOK_USERNAME = 'phalnnn';
     const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1556846947611054181/5r1jFTCmgmv-gFv3_TJYnZVNuBHor2Pf22HbZjBpZclmyKEQp1dkpYhKKVlUAJ4vMEH7';
 
-    // ===============================================
-    // TRẠNG THÁI (STATE)
-    // ===============================================
+    let _supabase = null;
     let currentCategory = 'shirts';
-    let vaultAccounts = []; // Sheet2 (Kho Áo)
-    let wuwaPackages = []; // Sheet1 (Nạp Game)
+    let vaultAccounts = [];
+    let wuwaPackages = [];
     let cart = [];
     let currentFilter = 'all';
     let searchQuery = '';
     let searchDebounceTimer = null;
     let redirectTimer = null;
     let countdownInterval = null;
-    
-    // Chat CSKH Session
+    let pillScrollTimeout = null;
+
     let chatSessionId = localStorage.getItem('chia_chat_session_id');
     if (!chatSessionId) {
       chatSessionId = 'guest_' + Math.random().toString(36).substring(2, 9);
       localStorage.setItem('chia_chat_session_id', chatSessionId);
     }
 
-    // ===============================================
-    // UI UTILS
-    // ===============================================
     function showToast(text) {
       const toast = document.getElementById('toast');
       toast.textContent = text;
@@ -1668,13 +1662,6 @@
       setTimeout(() => toast.classList.remove('show'), 2200);
     }
 
-    function formatPrice(num) {
-      return num > 0 ? num.toLocaleString('vi-VN') + 'đ' : 'Liên hệ';
-    }
-
-    // ===============================================
-    // QUẢN LÝ GIỎ HÀNG (CART)
-    // ===============================================
     function loadSavedCart() {
       try {
         const saved = localStorage.getItem('chia_cart');
@@ -1698,8 +1685,11 @@
       label.textContent = `${cart.length} món • ${formatPrice(total)}`;
 
       if (currentCategory === 'shirts') {
-        if (cart.length > 0) btn.classList.add('show-pill');
-        else btn.classList.remove('show-pill');
+        if (cart.length > 0) {
+          btn.classList.add('show-pill');
+        } else {
+          btn.classList.remove('show-pill');
+        }
       }
 
       updateWuwaBottomBar();
@@ -1724,6 +1714,7 @@
         wuwaCount.textContent = count;
         wuwaTotal.textContent = total > 0 ? total.toLocaleString('vi-VN') + ' đ' : '0 đ';
 
+        /* Chỉ hiển thị thanh thanh toán khi đã chọn ít nhất 1 gói */
         if (count > 0) {
           bottomBar.classList.add('active');
           document.body.classList.add('has-cart');
@@ -1775,65 +1766,86 @@
       }, 750);
     }
 
-    // ===============================================
-    // FETCH DATA TỪ GOOGLE SHEETS
-    // ===============================================
+    async function initSupabase() {
+      loadSavedCart();
+      const checkLibrary = () => window.supabase && typeof window.supabase.createClient === 'function';
+
+      if (!checkLibrary()) {
+        let attempts = 0;
+        const interval = setInterval(async () => {
+          attempts++;
+          if (checkLibrary()) {
+            clearInterval(interval);
+            _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            await fetchAllData();
+            initRealtimeChat();
+          } else if (attempts > 50) {
+            clearInterval(interval);
+            document.getElementById('vaultSkeleton').innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể tải dữ liệu!</p>`;
+          }
+        }, 80);
+      } else {
+        _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        await fetchAllData();
+        initRealtimeChat();
+      }
+    }
+
     async function fetchAllData() {
       const skeletonEl = document.getElementById('vaultSkeleton');
-      loadSavedCart(); // Khởi tạo giỏ hàng trước
-      
       try {
-        // Tải đồng thời cả 2 sheet từ Google Apps Script
         await Promise.all([fetchVaultShirts(), fetchWuwaPackages()]);
         if (skeletonEl) skeletonEl.style.display = 'none';
         applyFiltersAndRender();
       } catch (err) {
-        console.error("Lỗi Google Sheets:", err);
-        if (skeletonEl) skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể kết nối dữ liệu Google Sheets!</p>`;
+        console.error("Lỗi Supabase:", err);
+        if (skeletonEl) skeletonEl.innerHTML = `<p style="color:#fe2c55; text-align:center; padding:20px 0;">Không thể kết nối dữ liệu!</p>`;
       }
     }
 
     async function fetchVaultShirts() {
-      // Đọc Kho Áo từ Sheet2
-      const res = await fetch(GAS_URL + "?sheet=Sheet2");
-      const data = await res.json();
-      
-      if (Array.isArray(data)) {
-        vaultAccounts = data.filter(row => row.id && (String(row.is_sold) !== 'true' && row.is_sold !== true)).map(row => ({
-          id: 'acc_' + row.id,
-          rawId: row.id,
-          type: 'shirt',
-          title: String(row.title || 'Mẫu áo chưa đặt tên'),
-          image: row.image || '',
-          price: parseFloat(row.price) || 0
-        })).sort((a,b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
-      } else {
-        vaultAccounts = [];
-      }
+      const { data, error } = await _supabase
+        .from('accounts')
+        .select('id, title, image, price')
+        .eq('is_sold', false)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      vaultAccounts = (data || []).map(row => ({
+        id: 'acc_' + row.id,
+        rawId: row.id,
+        type: 'shirt',
+        title: String(row.title || 'Mẫu áo chưa đặt tên'),
+        image: row.image || '',
+        price: parseFloat(row.price) || 0
+      }));
     }
 
     async function fetchWuwaPackages() {
-      // Đọc Bảng Nạp từ Sheet1
-      const res = await fetch(GAS_URL + "?sheet=Sheet1");
-      const data = await res.json();
-      
-      if (Array.isArray(data)) {
-        wuwaPackages = data.filter(row => row.id).map(row => ({
+      try {
+        const { data, error } = await _supabase
+          .from('wuwa_packages')
+          .select('id, title, price, image')
+          .order('price', { ascending: true });
+
+        if (error) throw error;
+        wuwaPackages = (data || []).map(row => ({
           id: 'wuwa_' + row.id,
           rawId: row.id,
           type: 'wuwa',
           title: String(row.title || 'Gói Nạp WuWa'),
           image: row.image || '',
           price: parseFloat(row.price) || 0
-        })).sort((a, b) => a.price - b.price);
-      } else {
+        }));
+      } catch (e) {
         wuwaPackages = [];
       }
     }
 
-    // ===============================================
-    // LỌC, RENDER & CHUYỂN TAB
-    // ===============================================
+    function formatPrice(num) {
+      return num > 0 ? num.toLocaleString('vi-VN') + 'đ' : 'Liên hệ';
+    }
+
     function switchMainCategory(cat) {
       currentCategory = cat;
       const btnShirts = document.getElementById('catBtnShirts');
@@ -1933,7 +1945,7 @@
             <i class="fa-solid fa-check"></i>
           </div>
           <div class="wuwa-item-img-wrap">
-            <img class="wuwa-item-img" src="${item.image \vert{}\vert{} 'avatar.jpg'}" alt="${item.title}" loading="lazy" />
+            <img class="wuwa-item-img" src="${item.image || 'avatar.jpg'}" alt="${item.title}" loading="lazy" />
           </div>
           <div class="wuwa-item-meta">
             <div class="wuwa-item-title">${item.title}</div>
@@ -2051,9 +2063,6 @@
       showToast(`Đã thêm "${item.title}" vào giỏ 💗`);
     }
 
-    // ===============================================
-    // QUẢN LÝ GIAO DIỆN GIỎ HÀNG & MUA HÀNG
-    // ===============================================
     function toggleCartDrawer(isOpen) {
       const drawer = document.getElementById('cartDrawerOverlay');
       if (isOpen) {
@@ -2221,9 +2230,6 @@ ${codesList}
       showOrderNoticeModal();
     }
 
-    // ===============================================
-    // CHAT CSKH (LOCAL STORAGE + DISCORD WEBHOOK)
-    // ===============================================
     function toggleCskhModal(forceState) {
       const modal = document.getElementById('cskhChatModal');
       const isActive = forceState !== undefined ? forceState : !modal.classList.contains('active');
@@ -2235,7 +2241,7 @@ ${codesList}
       }
     }
 
-    function loadChatHistory() {
+    async function loadChatHistory() {
       const body = document.getElementById('cskhChatBody');
       body.innerHTML = `
         <div class="chat-bubble admin">
@@ -2243,13 +2249,38 @@ ${codesList}
         </div>
       `;
 
+      if (!_supabase) return;
       try {
-        const history = JSON.parse(localStorage.getItem('chia_chat_history_' + chatSessionId) || '[]');
-        history.forEach(msg => appendMessageUI(msg.sender, msg.text, msg.time));
+        const { data, error } = await _supabase
+          .from('chat_messages')
+          .select('sender, content, created_at')
+          .eq('session_id', chatSessionId)
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+        (data || []).forEach(msg => appendMessageUI(msg.sender, msg.content, msg.created_at));
+        body.scrollTop = body.scrollHeight;
       } catch (e) {
         console.warn("Lỗi tải lịch sử chat:", e);
       }
-      body.scrollTop = body.scrollHeight;
+    }
+
+    function initRealtimeChat() {
+      if (!_supabase) return;
+      _supabase
+        .channel('public:chat_messages')
+        .on('postgres_changes', {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'chat_messages',
+          filter: `session_id=eq.${chatSessionId}`
+        }, payload => {
+          const msg = payload.new;
+          if (msg.sender === 'admin') {
+            appendMessageUI('admin', msg.content, msg.created_at);
+          }
+        })
+        .subscribe();
     }
 
     function appendMessageUI(sender, text, timestamp) {
@@ -2269,17 +2300,20 @@ ${codesList}
       if (!text) return;
 
       input.value = '';
-      const now = new Date().toISOString();
-      appendMessageUI('user', text, now);
+      appendMessageUI('user', text, new Date());
 
-      // Lưu vào LocalStorage
-      try {
-        const history = JSON.parse(localStorage.getItem('chia_chat_history_' + chatSessionId) || '[]');
-        history.push({ sender: 'user', text: text, time: now });
-        localStorage.setItem('chia_chat_history_' + chatSessionId, JSON.stringify(history));
-      } catch (err) {}
+      if (_supabase) {
+        try {
+          await _supabase.from('chat_messages').insert({
+            session_id: chatSessionId,
+            sender: 'user',
+            content: text
+          });
+        } catch (err) {
+          console.error("Lỗi lưu Supabase:", err);
+        }
+      }
 
-      // Gửi sang Discord Webhook
       if (DISCORD_WEBHOOK_URL && !DISCORD_WEBHOOK_URL.includes('YOUR_WEBHOOK_ID')) {
         try {
           await fetch(DISCORD_WEBHOOK_URL, {
@@ -2296,7 +2330,7 @@ ${codesList}
                   { name: 'Nội dung', value: text }
                 ],
                 footer: { text: 'Kho áo & Nạp game của Chía 💗' },
-                timestamp: now
+                timestamp: new Date().toISOString()
               }]
             })
           });
@@ -2306,9 +2340,6 @@ ${codesList}
       }
     }
 
-    // ===============================================
-    // CÁC HÀM TIỆN ÍCH BỔ SUNG
-    // ===============================================
     const searchInput = document.getElementById('vaultSearchInput');
     const searchClearBtn = document.getElementById('searchClearBtn');
 
@@ -2381,13 +2412,7 @@ ${codesList}
       }
     });
 
-    // ===============================================
-    // KHỞI ĐỘNG HỆ THỐNG
-    // ===============================================
-    window.addEventListener('DOMContentLoaded', () => {
-      // 1. Tải dữ liệu sản phẩm từ Google Sheets
-      fetchAllData();
-    });
+    window.addEventListener('DOMContentLoaded', initSupabase);
   </script>
 </body>
 </html>
